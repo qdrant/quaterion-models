@@ -3,6 +3,14 @@ name = "quaterion-models"
 version = "0.1.0"
 description = "The collection of building blocks building fine-tunable metric learning models"
 authors = ["generall <andrey@vasnetsov.com>"]
+packages = [
+    {include = "quaterion-models"},
+]
+readme = "README.md"
+homepage = "https://github.com/qdrant/quaterion-models"
+repository = "https://github.com/qdrant/quaterion-models"
+keywords = ["framework", "metric-learning", "similarity", "deep-learning", "pytorch"]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
