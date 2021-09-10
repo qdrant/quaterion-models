@@ -138,3 +138,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Do not include auto-generated setup.py
+/setup.py
