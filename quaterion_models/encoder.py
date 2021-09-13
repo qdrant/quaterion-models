@@ -3,7 +3,7 @@ from typing import List, Any, Union, Dict, Tuple
 from torch import Tensor
 from torch import nn
 
-TensorInterchange = Union[Tensor, Tuple[Tensor], Dict[str, Tensor]]
+TensorInterchange = Union[Tensor, Tuple[Tensor], Dict[str, Tensor], Dict[str, dict]]
 
 
 class Encoder(nn.Module):
