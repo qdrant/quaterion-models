@@ -1,4 +1,5 @@
-from typing import Dict, List
+from functools import partial
+from typing import Dict, List, Type, Callable
 
 import torch
 from torch import nn
@@ -18,18 +19,26 @@ class MetricModel(nn.Module):
         self.encoders = encoders
         self.head = head
 
-    def collate(self, batch: List[dict]) -> TensorInterchange:
+    @classmethod
+    def collate_fn(cls, batch: List[dict], encoders: Dict[str, Type[Encoder]]) -> TensorInterchange:
         """
         Construct batches for all encoders
 
         :param batch:
+        :param encoders:
         :return:
         """
         result = dict(
             (key, encoder.collate(batch))
-            for key, encoder in self.encoders.items()
+            for key, encoder in encoders.items()
         )
         return result
+
+    def get_collate_fn(self) -> Callable:
+        return partial(MetricModel.collate_fn, encoders=dict(
+            (key, encoder.__class__)
+            for key, encoder in self.encoders.items()
+        ))
 
     def forward(self, batch):
         embeddings = [

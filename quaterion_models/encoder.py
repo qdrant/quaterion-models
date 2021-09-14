@@ -14,13 +14,21 @@ class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
 
+    def trainable(self) -> bool:
+        """
+        Defines if encoder is trainable. This flag affects caching and checkpoint saving of the encoder.
+        :return: bool
+        """
+        raise NotImplementedError()
+
     def embedding_size(self) -> int:
         """
         :return: Size of resulting embedding
         """
         raise NotImplementedError()
 
-    def collate(self, batch: List[Any]) -> TensorInterchange:
+    @classmethod
+    def collate(cls, batch: List[Any]) -> TensorInterchange:
         """
         Convert raw data batch into suitable model input
 
