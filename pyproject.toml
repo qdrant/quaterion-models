@@ -13,8 +13,10 @@ keywords = ["framework", "metric-learning", "similarity", "deep-learning", "pyto
 
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7,<3.10"
 torch = ">=1.8.2"
+numpy = "^1.21.2"
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
