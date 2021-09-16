@@ -1,9 +1,10 @@
-from typing import List, Any, Union, Dict, Tuple
+from typing import List, Any, Union, Dict, Tuple, Callable
 
 from torch import Tensor
 from torch import nn
 
 TensorInterchange = Union[Tensor, Tuple[Tensor], Dict[str, Tensor], Dict[str, dict]]
+CollateFnType = Callable[[List[Any]], TensorInterchange]
 
 
 class Encoder(nn.Module):
@@ -27,12 +28,10 @@ class Encoder(nn.Module):
         """
         raise NotImplementedError()
 
-    @classmethod
-    def collate(cls, batch: List[Any]) -> TensorInterchange:
+    def get_collate_fn(self) -> CollateFnType:
         """
-        Convert raw data batch into suitable model input
+        Provides function that converts raw data batch into suitable model input
 
-        :param batch: List of any input data
         :return: Model input
         """
         raise NotImplementedError()
