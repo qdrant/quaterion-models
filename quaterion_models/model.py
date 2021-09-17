@@ -11,6 +11,10 @@ from quaterion_models.utils.tensors import move_to_device
 
 
 class MetricModel(nn.Module):
+    @classmethod
+    def _disable_gradients(cls, model: nn.Module):
+        for key, weights in model.named_parameters():
+            weights.requires_grad = False
 
     def __init__(
             self,
@@ -20,6 +24,21 @@ class MetricModel(nn.Module):
         super(MetricModel, self).__init__()
         self.encoders = encoders
         self.head = head
+
+        self._disable_grads_for_encoders()
+
+    def _disable_grads_for_encoders(self):
+        """
+        Disable gradients for encoders marked as disabled
+        :return:
+        """
+        if isinstance(self.encoders, dict):
+            for encoder in self.encoders.values():
+                if not encoder.trainable():
+                    self._disable_gradients(encoder)
+        else:
+            if not self.encoders.trainable():
+                self._disable_gradients(self.encoders)
 
     @classmethod
     def collate_fn(cls,
