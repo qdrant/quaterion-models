@@ -1,9 +1,13 @@
+import json
+import os
+from typing import Dict, Any
+
 import torch
 from torch import nn
 
 
 class EncoderHead(nn.Module):
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(EncoderHead, self).__init__()
 
     def output_size(self) -> int:
@@ -11,3 +15,21 @@ class EncoderHead(nn.Module):
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError()
+
+    def get_config_dict(self) -> Dict[str, Any]:
+        """
+        Constructs savable parameters dict for
+        :return: Serializable parameters for __init__ of the Module
+        """
+        raise NotImplementedError()
+
+    def save(self, output_path):
+        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
+            json.dump(self.get_config_dict(), f_out)
+
+    @classmethod
+    def load(cls, input_path: str) -> 'EncoderHead':
+        with open(os.path.join(input_path, 'config.json')) as f_in:
+            config = json.load(f_in)
+
+        return cls(**config)

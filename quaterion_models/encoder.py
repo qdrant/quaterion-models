@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List, Any, Union, Dict, Tuple, Callable
 
 from torch import Tensor
@@ -42,5 +43,34 @@ class Encoder(nn.Module):
 
         :param batch: processed batch
         :return: embeddings, shape: [batch_size x embedding_size]
+        """
+        raise NotImplementedError()
+
+    def save(self, output_path: str):
+        """
+        Persist current state to the provided directory
+
+        :param output_path:
+        :return:
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def load(cls, input_path: str) -> 'Encoder':
+        """
+        Instantiate encoder from saved state.
+        If no state required - just call `create` instead
+
+        :param input_path:
+        :return:
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def create(cls) -> 'Encoder':
+        """
+        Initial instantiation of Encoder
+
+        :return:
         """
         raise NotImplementedError()

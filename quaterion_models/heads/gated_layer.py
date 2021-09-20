@@ -1,3 +1,6 @@
+import json
+import os
+
 import torch
 from torch.nn import Parameter
 
@@ -9,7 +12,6 @@ class GatedHead(EncoderHead):
     Disables or amplifies some components of input embedding.
     This layer have minimal amount of trainable parameters and is suitable for even small training sets.
     """
-
     def __init__(self, vector_size: int):
         super(GatedHead, self).__init__()
         self.vector_size = vector_size
@@ -29,3 +31,8 @@ class GatedHead(EncoderHead):
 
     def reset_parameters(self) -> None:
         torch.nn.init.constant_(self.gates, 2.)  # 2. ensures that all vector components are enabled by default
+
+    def get_config_dict(self):
+        return {
+            'vector_size': self.vector_size
+        }

@@ -1,3 +1,5 @@
+import json
+import os
 from functools import partial
 from typing import Dict, List, Type, Callable, Any, Union
 
@@ -144,3 +146,53 @@ class MetricModel(nn.Module):
         result_embedding = self.head(joined_embeddings)
 
         return result_embedding
+
+    @classmethod
+    def _get_head_path(cls, directory: str):
+        return os.path.join(directory, 'head')
+
+    @classmethod
+    def _get_encoders_path(cls, directory: str):
+        return os.path.join(directory, 'encoders')
+
+    def save(self, output_path: str):
+        head_path = self._get_head_path(output_path)
+        os.mkdir(head_path)
+        self.head.save(head_path)
+
+        head_config = {
+            "class": self.head.__class__.__qualname__,
+            "module": self.head.__module__,
+        }
+
+        encoders_path = self._get_encoders_path(output_path)
+        os.mkdir(encoders_path)
+
+        encoders_config = []
+
+        if isinstance(self.encoders, dict):
+            for encoder_key, encoder in self.encoders.items():
+                encoder_path = os.path.join(encoders_path, encoder_key)
+                os.mkdir(encoder_path)
+                encoder.save(encoder_path)
+                encoders_config.append({
+                    "key": encoder_key,
+                    "module": encoder.__module__,
+                    "class": encoder.__class__.__qualname__
+                })
+        else:
+            self.encoders.save(encoders_path)
+            encoders_config = {
+                "module": self.encoders.__module__,
+                "class": self.encoders.__class__.__qualname__
+            }
+
+        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
+            json.dump({
+                "encoders": encoders_config,
+                "head": head_config
+            }, f_out)
+
+    @classmethod
+    def load(cls, input_path: str) -> 'MetricModel':
+        pass
