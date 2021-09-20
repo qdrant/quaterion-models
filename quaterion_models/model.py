@@ -106,7 +106,7 @@ class MetricModel(nn.Module):
             features = move_to_device(features, device)
 
             with torch.no_grad():
-                embeddings = self.model.forward(features)
+                embeddings = self.forward(features)
                 embeddings = embeddings.detach()
                 if to_numpy:
                     embeddings = embeddings.cpu().numpy()
