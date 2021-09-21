@@ -1,3 +1,6 @@
+import json
+import os
+import tempfile
 from multiprocessing import Pool
 from typing import List, Any
 
@@ -5,6 +8,7 @@ import torch
 from torch import Tensor
 
 from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
+from quaterion_models.heads.empty_head import EmptyHead
 from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.model import MetricModel
 
@@ -26,6 +30,13 @@ TEST_EMB_SIZE = 5
 
 
 class TestEncoder(Encoder):
+
+    def save(self, output_path: str):
+        pass
+
+    @classmethod
+    def load(cls, input_path: str) -> 'Encoder':
+        return cls()
 
     def __init__(self):
         super().__init__()
@@ -57,7 +68,6 @@ class Tst:
 
 
 def test_get_collate_fn():
-
     model = MetricModel(encoders={
         "test": TestEncoder()
     }, head=LambdaHead())
@@ -81,3 +91,27 @@ def test_get_collate_fn():
     tensor = first_batch['test']
 
     assert tensor.shape == (3, TEST_EMB_SIZE)
+
+
+def test_model_save_and_load():
+    tempdir = tempfile.TemporaryDirectory()
+    model = MetricModel(
+        encoders={
+            "test": TestEncoder()
+        },
+        head=EmptyHead(100)
+    )
+
+    model.save(tempdir.name)
+
+    config_path = os.path.join(tempdir.name, 'config.json')
+
+    assert os.path.exists(config_path)
+
+    loaded_model = MetricModel.load(tempdir.name)
+
+    assert model.encoders.keys() == loaded_model.encoders.keys()
+    assert [type(encoder) for encoder in model.encoders.values()] == \
+           [type(encoder) for encoder in loaded_model.encoders.values()]
+
+    assert type(model.head) == type(loaded_model.head)

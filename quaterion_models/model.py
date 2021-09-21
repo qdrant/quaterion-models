@@ -9,7 +9,10 @@ from torch import nn
 
 from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
 from quaterion_models.heads.encoder_head import EncoderHead
+from quaterion_models.utils.classes import save_class_import, restore_class
 from quaterion_models.utils.tensors import move_to_device
+
+DEFAULT_ENCODER_KEY = 'default'
 
 
 class MetricModel(nn.Module):
@@ -18,34 +21,10 @@ class MetricModel(nn.Module):
         for key, weights in model.named_parameters():
             weights.requires_grad = False
 
-    def __init__(
-            self,
-            encoders: Union[Encoder, Dict[str, Encoder]],
-            head: EncoderHead
-    ):
-        super(MetricModel, self).__init__()
-        self.encoders = encoders
-        self.head = head
-
-        self._disable_grads_for_encoders()
-
-    def _disable_grads_for_encoders(self):
-        """
-        Disable gradients for encoders marked as disabled
-        :return:
-        """
-        if isinstance(self.encoders, dict):
-            for encoder in self.encoders.values():
-                if not encoder.trainable():
-                    self._disable_gradients(encoder)
-        else:
-            if not self.encoders.trainable():
-                self._disable_gradients(self.encoders)
-
     @classmethod
     def collate_fn(cls,
                    batch: List[dict],
-                   encoders_collate_fns: Union[CollateFnType, Dict[str, CollateFnType]]) -> TensorInterchange:
+                   encoders_collate_fns: Dict[str, CollateFnType]) -> TensorInterchange:
         """
         Construct batches for all encoders
 
@@ -53,14 +32,70 @@ class MetricModel(nn.Module):
         :param encoders_collate_fns: Dict (or single) of collate functions associated with encoders
         :return:
         """
-        if isinstance(encoders_collate_fns, dict):
-            result = dict(
-                (key, collate_fn(batch))
-                for key, collate_fn in encoders_collate_fns.items()
-            )
-            return result
+        result = dict(
+            (key, collate_fn(batch))
+            for key, collate_fn in encoders_collate_fns.items()
+        )
+        return result
+
+    @classmethod
+    def _disable_grads_for_encoders(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
+        """
+        Disable gradients for encoders marked as disabled
+        :return:
+        """
+        encoders = encoders.values() if isinstance(encoders, dict) else [encoders]
+        for encoder in encoders:
+            if not encoder.trainable():
+                cls._disable_gradients(encoder)
+
+    @classmethod
+    def _get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
+        """
+        Calculate total output size of given encoders
+        :param encoders:
+        :return:
+        """
+        encoders = encoders.values() if isinstance(encoders, dict) else [encoders]
+        total_size = 0
+        for encoder in encoders:
+            total_size += encoder.embedding_size()
+        return total_size
+
+    def __init__(
+            self,
+            encoders: Union[Encoder, Dict[str, Encoder]] = None,
+            head: EncoderHead = None
+    ):
+        super(MetricModel, self).__init__()
+        encoders = encoders or self.init_encoders()
+
+        if not isinstance(encoders, dict):
+            self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
         else:
-            return encoders_collate_fns(batch)
+            self.encoders: Dict[str, Encoder] = encoders
+
+        self.head = head or self.init_head(self._get_encoders_output_size(self.encoders))
+        self._disable_grads_for_encoders(self.encoders)
+
+    def init_encoders(self) -> Union[Encoder, Dict[str, Encoder]]:
+        """
+        Use this function to define an initial state of encoders.
+        This function should be used to assign initial values for encoders before training
+        as well as during the checkpoint loading.
+
+        :return: Instance of the `Encoder` or dict of instances
+        """
+        raise NotImplementedError()
+
+    def init_head(self, input_embedding_size: int) -> EncoderHead:
+        """
+        Use this function to define an initial state for head layer of the model
+
+        :param input_embedding_size: size of embeddings produced by encoders
+        :return: Instance of `EncoderHead`
+        """
+        raise NotImplementedError()
 
     def get_collate_fn(self) -> Callable:
         """
@@ -68,14 +103,10 @@ class MetricModel(nn.Module):
 
         :return: neural network inputs
         """
-        if isinstance(self.encoders, dict):
-            return partial(MetricModel.collate_fn, encoders_collate_fns=dict(
-                (key, encoder.get_collate_fn())
-                for key, encoder in self.encoders.items()
-            ))
-        else:
-            return partial(MetricModel.collate_fn,
-                           encoders_collate_fns=self.encoders.get_collate_fn())
+        return partial(MetricModel.collate_fn, encoders_collate_fns=dict(
+            (key, encoder.get_collate_fn())
+            for key, encoder in self.encoders.items()
+        ))
 
     def encode(self,
                inputs: Union[List[Any], Any],
@@ -125,27 +156,27 @@ class MetricModel(nn.Module):
         return all_embeddings
 
     def forward(self, batch):
-        if isinstance(self.encoders, dict):
-            embeddings = [
-                (key, encoder.forward(batch[key]))
-                for key, encoder in self.encoders.items()
-            ]
-            # Order embeddings by key name, to ensure reproduction
-            embeddings = sorted(embeddings, key=lambda x: x[0])
+        embeddings = [
+            (key, encoder.forward(batch[key]))
+            for key, encoder in self.encoders.items()
+        ]
+        # Order embeddings by key name, to ensure reproduction
+        embeddings = sorted(embeddings, key=lambda x: x[0])
 
-            # Only embedding tensors of shape [batch_size x encoder_output_size]
-            embedding_tensors = [embedding[1] for embedding in embeddings]
+        # Only embedding tensors of shape [batch_size x encoder_output_size]
+        embedding_tensors = [embedding[1] for embedding in embeddings]
 
-            # Shape: [batch_size x sum( encoders_emb_sizes )]
-            joined_embeddings = torch.cat(embedding_tensors, dim=1)
-        else:
-            # Shape: [batch_size x encoder_output_size]
-            joined_embeddings = self.encoders.forward(batch)
+        # Shape: [batch_size x sum( encoders_emb_sizes )]
+        joined_embeddings = torch.cat(embedding_tensors, dim=1)
 
         # Shape: [batch_size x output_emb_size]
         result_embedding = self.head(joined_embeddings)
 
         return result_embedding
+
+    # -------------------------------------------
+    # ---------- Persistence methods ------------
+    # -------------------------------------------
 
     @classmethod
     def _get_head_path(cls, directory: str):
@@ -160,32 +191,21 @@ class MetricModel(nn.Module):
         os.mkdir(head_path)
         self.head.save(head_path)
 
-        head_config = {
-            "class": self.head.__class__.__qualname__,
-            "module": self.head.__module__,
-        }
+        head_config = save_class_import(self.head)
 
         encoders_path = self._get_encoders_path(output_path)
         os.mkdir(encoders_path)
 
         encoders_config = []
 
-        if isinstance(self.encoders, dict):
-            for encoder_key, encoder in self.encoders.items():
-                encoder_path = os.path.join(encoders_path, encoder_key)
-                os.mkdir(encoder_path)
-                encoder.save(encoder_path)
-                encoders_config.append({
-                    "key": encoder_key,
-                    "module": encoder.__module__,
-                    "class": encoder.__class__.__qualname__
-                })
-        else:
-            self.encoders.save(encoders_path)
-            encoders_config = {
-                "module": self.encoders.__module__,
-                "class": self.encoders.__class__.__qualname__
-            }
+        for encoder_key, encoder in self.encoders.items():
+            encoder_path = os.path.join(encoders_path, encoder_key)
+            os.mkdir(encoder_path)
+            encoder.save(encoder_path)
+            encoders_config.append({
+                "key": encoder_key,
+                **save_class_import(encoder)
+            })
 
         with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
             json.dump({
@@ -195,4 +215,21 @@ class MetricModel(nn.Module):
 
     @classmethod
     def load(cls, input_path: str) -> 'MetricModel':
-        pass
+        with open(os.path.join(input_path, 'config.json')) as f_in:
+            config = json.load(f_in)
+
+        head_config = config["head"]
+        head_class: Type[EncoderHead] = restore_class(head_config)
+        head_path = cls._get_head_path(input_path)
+        head = head_class.load(head_path)
+
+        encoders: Union[Encoder, Dict[str, Encoder]] = {}
+        encoders_path = cls._get_encoders_path(input_path)
+        encoders_config = config["encoders"]
+
+        for encoder_params in encoders_config:
+            encoder_key = encoder_params["key"]
+            encoder_class = restore_class(encoder_params)
+            encoders[encoder_key] = encoder_class.load(os.path.join(encoders_path, encoder_key))
+
+        return cls(head=head, encoders=encoders)

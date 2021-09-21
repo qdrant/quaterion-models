@@ -7,8 +7,9 @@ from torch import nn
 
 
 class EncoderHead(nn.Module):
-    def __init__(self, **kwargs):
+    def __init__(self, input_embedding_size: int, **kwargs):
         super(EncoderHead, self).__init__()
+        self.input_embedding_size = input_embedding_size
 
     def output_size(self) -> int:
         raise NotImplementedError()
@@ -18,10 +19,12 @@ class EncoderHead(nn.Module):
 
     def get_config_dict(self) -> Dict[str, Any]:
         """
-        Constructs savable parameters dict for
+        Constructs savable parameters dict
         :return: Serializable parameters for __init__ of the Module
         """
-        raise NotImplementedError()
+        return {
+            "input_embedding_size": self.input_embedding_size
+        }
 
     def save(self, output_path):
         with open(os.path.join(output_path, 'config.json'), 'w') as f_out:

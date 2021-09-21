@@ -65,12 +65,3 @@ class Encoder(nn.Module):
         :return:
         """
         raise NotImplementedError()
-
-    @classmethod
-    def create(cls) -> 'Encoder':
-        """
-        Initial instantiation of Encoder
-
-        :return:
-        """
-        raise NotImplementedError()
