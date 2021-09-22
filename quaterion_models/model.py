@@ -39,17 +39,6 @@ class MetricModel(nn.Module):
         return result
 
     @classmethod
-    def _disable_grads_for_encoders(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
-        """
-        Disable gradients for encoders marked as disabled
-        :return:
-        """
-        encoders = encoders.values() if isinstance(encoders, dict) else [encoders]
-        for encoder in encoders:
-            if not encoder.trainable():
-                cls._disable_gradients(encoder)
-
-    @classmethod
     def get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
         """
         Calculate total output size of given encoders
@@ -74,11 +63,14 @@ class MetricModel(nn.Module):
         else:
             self.encoders: Dict[str, Encoder] = encoders
 
+        for key, encoder in self.encoders.items():
+            if not encoder.trainable():
+                self._disable_gradients(encoder)
+            self.add_module(key, encoder)
+
         self.head = head
 
     def train(self, mode: bool = True):
-        if mode:
-            self._disable_grads_for_encoders(self.encoders)
         super(MetricModel, self).train(mode)
 
     def get_collate_fn(self) -> Callable:
@@ -176,13 +168,13 @@ class MetricModel(nn.Module):
 
     def save(self, output_path: str):
         head_path = self._get_head_path(output_path)
-        os.mkdir(head_path)
+        os.makedirs(head_path, exist_ok=True)
         self.head.save(head_path)
 
         head_config = save_class_import(self.head)
 
         encoders_path = self._get_encoders_path(output_path)
-        os.mkdir(encoders_path)
+        os.makedirs(encoders_path, exist_ok=True)
 
         encoders_config = []
 
