@@ -50,7 +50,7 @@ class MetricModel(nn.Module):
                 cls._disable_gradients(encoder)
 
     @classmethod
-    def _get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
+    def get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
         """
         Calculate total output size of given encoders
         :param encoders:
@@ -64,38 +64,22 @@ class MetricModel(nn.Module):
 
     def __init__(
             self,
-            encoders: Union[Encoder, Dict[str, Encoder]] = None,
-            head: EncoderHead = None
+            encoders: Union[Encoder, Dict[str, Encoder]],
+            head: EncoderHead
     ):
         super(MetricModel, self).__init__()
-        encoders = encoders or self.init_encoders()
 
         if not isinstance(encoders, dict):
             self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
         else:
             self.encoders: Dict[str, Encoder] = encoders
 
-        self.head = head or self.init_head(self._get_encoders_output_size(self.encoders))
-        self._disable_grads_for_encoders(self.encoders)
+        self.head = head
 
-    def init_encoders(self) -> Union[Encoder, Dict[str, Encoder]]:
-        """
-        Use this function to define an initial state of encoders.
-        This function should be used to assign initial values for encoders before training
-        as well as during the checkpoint loading.
-
-        :return: Instance of the `Encoder` or dict of instances
-        """
-        raise NotImplementedError()
-
-    def init_head(self, input_embedding_size: int) -> EncoderHead:
-        """
-        Use this function to define an initial state for head layer of the model
-
-        :param input_embedding_size: size of embeddings produced by encoders
-        :return: Instance of `EncoderHead`
-        """
-        raise NotImplementedError()
+    def train(self, mode: bool = True):
+        if mode:
+            self._disable_grads_for_encoders(self.encoders)
+        super(MetricModel, self).train(mode)
 
     def get_collate_fn(self) -> Callable:
         """
@@ -107,6 +91,10 @@ class MetricModel(nn.Module):
             (key, encoder.get_collate_fn())
             for key, encoder in self.encoders.items()
         ))
+
+    # -------------------------------------------
+    # ---------- Inference methods --------------
+    # -------------------------------------------
 
     def encode(self,
                inputs: Union[List[Any], Any],
