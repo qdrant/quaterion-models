@@ -12,11 +12,13 @@ from quaterion_models.heads.empty_head import EmptyHead
 from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.model import MetricModel
 
+TEST_EMB_SIZE = 5
+
 
 class LambdaHead(EncoderHead):
 
     def __init__(self):
-        super(LambdaHead, self).__init__()
+        super(LambdaHead, self).__init__(TEST_EMB_SIZE)
         self.my_lambda = lambda x: "hello"
 
     def output_size(self) -> int:
@@ -24,9 +26,6 @@ class LambdaHead(EncoderHead):
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
         return input_vectors
-
-
-TEST_EMB_SIZE = 5
 
 
 class TestEncoder(Encoder):
