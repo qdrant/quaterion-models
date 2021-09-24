@@ -191,7 +191,7 @@ class MetricModel(nn.Module):
             json.dump({
                 "encoders": encoders_config,
                 "head": head_config
-            }, f_out)
+            }, f_out, indent=2)
 
     @classmethod
     def load(cls, input_path: str) -> 'MetricModel':
