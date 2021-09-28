@@ -4,7 +4,7 @@ from typing import List, Any, Union, Dict, Tuple, Callable
 from torch import Tensor
 from torch import nn
 
-TensorInterchange = Union[Tensor, Tuple[Tensor], Dict[str, Tensor], Dict[str, dict]]
+TensorInterchange = Union[Tensor, Tuple[Tensor], List[Tensor], Dict[str, Tensor], Dict[str, dict]]
 CollateFnType = Callable[[List[Any]], TensorInterchange]
 
 
@@ -15,6 +15,15 @@ class Encoder(nn.Module):
 
     def __init__(self):
         super(Encoder, self).__init__()
+
+    def disable_gradients_if_required(self):
+        """
+        Disables gradients of the model if it is declared as not trainable
+        :return:
+        """
+        if not self.trainable():
+            for key, weights in self.named_parameters():
+                weights.requires_grad = False
 
     def trainable(self) -> bool:
         """

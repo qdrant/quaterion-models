@@ -16,10 +16,6 @@ DEFAULT_ENCODER_KEY = 'default'
 
 
 class MetricModel(nn.Module):
-    @classmethod
-    def _disable_gradients(cls, model: nn.Module):
-        for key, weights in model.named_parameters():
-            weights.requires_grad = False
 
     @classmethod
     def collate_fn(cls,
@@ -64,8 +60,7 @@ class MetricModel(nn.Module):
             self.encoders: Dict[str, Encoder] = encoders
 
         for key, encoder in self.encoders.items():
-            if not encoder.trainable():
-                self._disable_gradients(encoder)
+            encoder.disable_gradients_if_required()
             self.add_module(key, encoder)
 
         self.head = head
@@ -103,7 +98,7 @@ class MetricModel(nn.Module):
         :return: Numpy array or torch.Tensor of shape [input_size x embedding_size]
         """
         self.eval()
-        device = next(self.parameters()).device
+        device = next(self.parameters(), torch.tensor(0)).device
         collate_fn = self.get_collate_fn()
 
         input_was_list = True
