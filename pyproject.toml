@@ -16,10 +16,14 @@ keywords = ["framework", "metric-learning", "similarity", "deep-learning", "pyto
 python = ">=3.7,<3.10"
 torch = ">=1.8.2"
 numpy = "^1.21.2"
+gensim = {version = "^4.1.2", optional = true}
 
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+
+[tool.poetry.extras]
+fasttext = ["gensim"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]
