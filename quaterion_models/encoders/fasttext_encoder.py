@@ -1,3 +1,5 @@
+import json
+import os
 from typing import List, Any
 
 import gensim
@@ -7,7 +9,7 @@ from gensim.models import FastText
 from gensim.models.fasttext import FastTextKeyedVectors
 from torch import Tensor
 
-from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
+from quaterion_models.encoder import Encoder, CollateFnType
 
 
 def load_fasttext_model(path):
@@ -94,8 +96,18 @@ class FasttextEncoder(Encoder):
         return torch.stack(embeddings)
 
     def save(self, output_path: str):
-        pass
+        model_path = os.path.join(output_path, 'fasttext.model')
+        self.model.save(model_path, separately=['vectors_ngrams', 'vectors', 'vectors_vocab'])
+        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
+            json.dump({
+                "on_disk": self.on_disk,
+                "aggregations": self.aggregations
+            }, f_out, indent=2)
 
     @classmethod
     def load(cls, input_path: str) -> 'Encoder':
-        pass
+        model_path = os.path.join(input_path, 'fasttext.model')
+        with open(os.path.join(input_path, 'config.json')) as f_in:
+            config = json.load(f_in)
+
+        return cls(model_path=model_path, **config)
