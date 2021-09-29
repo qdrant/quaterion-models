@@ -45,7 +45,7 @@ class FasttextEncoder(Encoder):
             What types of aggregations to use to combine multiple vectors into one
             If multiple aggregations are specified - concatenation of all of them will be used as a result.
         """
-        super(FasttextEncoder).__init__()
+        super(FasttextEncoder, self).__init__()
         self.device = torch.device("cpu")
 
         if aggregations is None:
@@ -101,7 +101,7 @@ class FasttextEncoder(Encoder):
         with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
             json.dump({
                 "on_disk": self.on_disk,
-                "aggregations": self.aggregations
+                "aggregations": self.aggregations,
             }, f_out, indent=2)
 
     @classmethod

@@ -40,3 +40,5 @@ def test_fasttext_encoder():
 
     assert embeddings.shape[0] == 2
     assert embeddings.shape[1] == 20
+
+    encoder.named_parameters()
