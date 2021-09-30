@@ -27,14 +27,6 @@ def load_fasttext_model(path):
 class FasttextEncoder(Encoder):
     aggregation_options = ['min', 'max', 'avg']
 
-    def cpu(self):
-        self.device = torch.device("cpu")
-        return super().cpu()
-
-    def cuda(self, device=None):
-        self.device = device
-        return super().cuda(device)
-
     def __init__(self, model_path: str, on_disk: bool, aggregations: List[str] = None):
         """
         Creates a fasttext encoder, which generates vector for a list of tokens based in given fasttext model
@@ -46,7 +38,9 @@ class FasttextEncoder(Encoder):
             If multiple aggregations are specified - concatenation of all of them will be used as a result.
         """
         super(FasttextEncoder, self).__init__()
-        self.device = torch.device("cpu")
+
+        # workaround tensor to keep information about required model device
+        self._device_tensor = torch.nn.Parameter(torch.zeros(1))
 
         if aggregations is None:
             aggregations = ["avg"]
@@ -91,7 +85,7 @@ class FasttextEncoder(Encoder):
                 record_vectors = np.stack(token_vectors)
             else:
                 record_vectors = np.zeros((1, self.model.vector_size))
-            token_tensor = torch.tensor(record_vectors, device=self.device)
+            token_tensor = torch.tensor(record_vectors, device=self._device_tensor.device)
             record_embedding = torch.cat([
                 self.aggregate(token_tensor, operation) for operation in self.aggregations
             ])
