@@ -86,7 +86,11 @@ class FasttextEncoder(Encoder):
     def forward(self, batch: List[List[str]]) -> Tensor:
         embeddings = []
         for record in batch:
-            record_vectors = np.stack([self.model.get_vector(token) for token in record])
+            token_vectors = [self.model.get_vector(token) for token in record]
+            if token_vectors:
+                record_vectors = np.stack(token_vectors)
+            else:
+                record_vectors = np.zeros((1, self.model.vector_size))
             token_tensor = torch.tensor(record_vectors, device=self.device)
             record_embedding = torch.cat([
                 self.aggregate(token_tensor, operation) for operation in self.aggregations
