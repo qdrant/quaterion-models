@@ -21,7 +21,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         self.output_size_per_group = output_size_per_group
         self.projectors = []
 
-        self.projection_layer = Linear(self.input_embedding_size, self.output_size_per_group * self.output_group)
+        self.projection_layer = Linear(self.input_embedding_size, self.output_size_per_group * self.output_groups)
 
     def forward(self, input_vectors: torch.Tensor):
         """
