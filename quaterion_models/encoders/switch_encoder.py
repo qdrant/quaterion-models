@@ -8,13 +8,7 @@ from torch import Tensor
 
 from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
 from quaterion_models.utils.classes import save_class_import, restore_class
-from quaterion_models.utils.tensors import move_to_device
-
-
-def inverse_permutation(perm):
-    inv = torch.empty_like(perm)
-    inv[perm] = torch.arange(perm.size(0), device=perm.device)
-    return inv
+from quaterion_models.utils.tensors import inverse_permutation
 
 
 class SwitchEncoder(Encoder):
@@ -86,9 +80,8 @@ class SwitchEncoder(Encoder):
         for key, batch in switch_batches.items():
             embeddings.append(self.options[key].forward(batch))
             ordering += switch_ordering[key]
-        ordering_tensor: Tensor = inverse_permutation(torch.tensor(ordering))
         embeddings_tensor: Tensor = torch.cat(embeddings)
-        ordering_tensor = move_to_device(ordering_tensor, embeddings_tensor.device)
+        ordering_tensor: Tensor = inverse_permutation(torch.tensor(ordering, device=embeddings_tensor.device))
         return embeddings_tensor[ordering_tensor]
 
     def save(self, output_path: str):

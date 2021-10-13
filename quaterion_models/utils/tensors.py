@@ -22,3 +22,9 @@ def move_to_device(obj, device: torch.device):
         return tuple(move_to_device(item, device) for item in obj)
     else:
         return obj
+
+
+def inverse_permutation(perm):
+    inv = torch.empty_like(perm)
+    inv[perm] = torch.arange(perm.size(0), device=perm.device)
+    return inv
