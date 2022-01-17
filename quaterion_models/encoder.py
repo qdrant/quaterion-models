@@ -45,6 +45,14 @@ class Encoder(nn.Module):
         """
         raise NotImplementedError()
 
+    def get_key_collate_fn(self) -> CollateFnType:
+        """
+        Provides function that produces keys for data batch in caching purposes
+
+        :return: Collection of keys for cache
+        """
+        pass
+
     def forward(self, batch: TensorInterchange) -> Tensor:
         """
         Infer encoder - convert input batch to embeddings
