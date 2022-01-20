@@ -1,0 +1,4 @@
+from quaterion_models.heads.empty_head import EmptyHead
+from quaterion_models.heads.encoder_head import EncoderHead
+from quaterion_models.heads.gated_head import GatedHead
+from quaterion_models.heads.softmax_head import SoftmaxEmbeddingsHead
