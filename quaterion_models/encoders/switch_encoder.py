@@ -6,9 +6,9 @@ from typing import Dict, Any, List
 import torch
 from torch import Tensor
 
-from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
-from quaterion_models.utils.classes import save_class_import, restore_class
-from quaterion_models.utils.tensors import move_to_device
+from quaterion_models.encoders import Encoder
+from quaterion_models.types import TensorInterchange, CollateFnType
+from quaterion_models.utils import save_class_import, restore_class, move_to_device
 
 
 def inverse_permutation(perm):
@@ -44,7 +44,9 @@ class SwitchEncoder(Encoder):
             embedding_sizes.add(encoder.embedding_size())
 
         if len(embedding_sizes) != 1:
-            raise RuntimeError(f"Alternative encoders have inconsistent output size: {embedding_sizes}")
+            raise RuntimeError(
+                f"Alternative encoders have inconsistent output size: {embedding_sizes}"
+            )
 
         self._embedding_size = list(embedding_sizes)[0]
 
@@ -59,7 +61,9 @@ class SwitchEncoder(Encoder):
         return self._embedding_size
 
     @classmethod
-    def switch_collate_fn(cls, batch: List[Any], encoder_collates: Dict[str, CollateFnType]) -> TensorInterchange:
+    def switch_collate_fn(
+        cls, batch: List[Any], encoder_collates: Dict[str, CollateFnType]
+    ) -> TensorInterchange:
         switch_batches = dict((key, []) for key in encoder_collates.keys())
         switch_ordering = dict((key, []) for key in encoder_collates.keys())
         for original_id, record in enumerate(batch):
@@ -67,15 +71,14 @@ class SwitchEncoder(Encoder):
             switch_batches[record_encoder].append(record)
             switch_ordering[record_encoder].append(original_id)
 
-        return {
-            "ordering": switch_ordering,
-            "batches": switch_batches
-        }
+        return {"ordering": switch_ordering, "batches": switch_batches}
 
     def get_collate_fn(self) -> CollateFnType:
         return partial(
             self.__class__.switch_collate_fn,
-            encoder_collates=dict((key, encoder.get_collate_fn()) for key, encoder in self.options.items())
+            encoder_collates=dict(
+                (key, encoder.get_collate_fn()) for key, encoder in self.options.items()
+            ),
         )
 
     def forward(self, batch: TensorInterchange) -> Tensor:
@@ -99,14 +102,18 @@ class SwitchEncoder(Encoder):
             os.makedirs(encoder_path, exist_ok=True)
             encoder.save(encoder_path)
 
-        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
-            json.dump({
-                "encoders": encoders,
-            }, f_out, indent=2)
+        with open(os.path.join(output_path, "config.json"), "w") as f_out:
+            json.dump(
+                {
+                    "encoders": encoders,
+                },
+                f_out,
+                indent=2,
+            )
 
     @classmethod
-    def load(cls, input_path: str) -> 'Encoder':
-        with open(os.path.join(input_path, 'config.json')) as f_in:
+    def load(cls, input_path: str) -> "Encoder":
+        with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
 
         encoders = {}

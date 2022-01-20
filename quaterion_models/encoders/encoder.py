@@ -3,9 +3,7 @@ from typing import List, Any, Union, Dict, Tuple, Callable
 from torch import Tensor
 from torch import nn
 
-TensorInterchange = Union[Tensor, Tuple[Tensor], List[Tensor], Dict[str, Tensor], Dict[str, dict], Any]
-CollateFnType = Callable[[List[Any]], TensorInterchange]
-
+from quaterion_models.types import TensorInterchange, CollateFnType
 
 class Encoder(nn.Module):
     """
@@ -64,7 +62,7 @@ class Encoder(nn.Module):
         raise NotImplementedError()
 
     @classmethod
-    def load(cls, input_path: str) -> 'Encoder':
+    def load(cls, input_path: str) -> "Encoder":
         """
         Instantiate encoder from saved state.
         If no state required - just call `create` instead

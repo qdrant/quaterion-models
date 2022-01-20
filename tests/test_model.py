@@ -7,16 +7,15 @@ from typing import List, Any
 import torch
 from torch import Tensor
 
-from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
-from quaterion_models.heads.empty_head import EmptyHead
-from quaterion_models.heads.encoder_head import EncoderHead
-from quaterion_models.model import MetricModel
+from quaterion_models.encoders import Encoder
+from quaterion_models.types import TensorInterchange, CollateFnType
+from quaterion_models.heads import EmptyHead, EncoderHead
+from quaterion_models import MetricModel
 
 TEST_EMB_SIZE = 5
 
 
 class LambdaHead(EncoderHead):
-
     def __init__(self):
         super(LambdaHead, self).__init__(TEST_EMB_SIZE)
         self.my_lambda = lambda x: "hello"
@@ -29,12 +28,11 @@ class LambdaHead(EncoderHead):
 
 
 class TestEncoder(Encoder):
-
     def save(self, output_path: str):
         pass
 
     @classmethod
-    def load(cls, input_path: str) -> 'Encoder':
+    def load(cls, input_path: str) -> "Encoder":
         return cls()
 
     def __init__(self):
@@ -67,50 +65,39 @@ class Tst:
 
 
 def test_get_collate_fn():
-    model = MetricModel(encoders={
-        "test": TestEncoder()
-    }, head=LambdaHead())
+    model = MetricModel(encoders={"test": TestEncoder()}, head=LambdaHead())
 
     tester = Tst(foo=model.get_collate_fn())
 
     with Pool(2) as pool:
-        res = pool.map(tester.bar, [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-            [10]
-        ])
+        res = pool.map(tester.bar, [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]])
 
     assert len(res) == 4
 
     first_batch = res[0]
 
-    assert 'test' in first_batch
+    assert "test" in first_batch
 
-    tensor = first_batch['test']
+    tensor = first_batch["test"]
 
     assert tensor.shape == (3, TEST_EMB_SIZE)
 
 
 def test_model_save_and_load():
     tempdir = tempfile.TemporaryDirectory()
-    model = MetricModel(
-        encoders={
-            "test": TestEncoder()
-        },
-        head=EmptyHead(100)
-    )
+    model = MetricModel(encoders={"test": TestEncoder()}, head=EmptyHead(100))
 
     model.save(tempdir.name)
 
-    config_path = os.path.join(tempdir.name, 'config.json')
+    config_path = os.path.join(tempdir.name, "config.json")
 
     assert os.path.exists(config_path)
 
     loaded_model = MetricModel.load(tempdir.name)
 
     assert model.encoders.keys() == loaded_model.encoders.keys()
-    assert [type(encoder) for encoder in model.encoders.values()] == \
-           [type(encoder) for encoder in loaded_model.encoders.values()]
+    assert [type(encoder) for encoder in model.encoders.values()] == [
+        type(encoder) for encoder in loaded_model.encoders.values()
+    ]
 
     assert type(model.head) == type(loaded_model.head)

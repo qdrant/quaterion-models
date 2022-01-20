@@ -7,20 +7,20 @@ import numpy as np
 import torch
 from torch import nn
 
-from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
+from quaterion_models.encoders import Encoder
+from quaterion_models.types import TensorInterchange, CollateFnType
 from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.utils.classes import save_class_import, restore_class
 from quaterion_models.utils.tensors import move_to_device
 
-DEFAULT_ENCODER_KEY = 'default'
+DEFAULT_ENCODER_KEY = "default"
 
 
 class MetricModel(nn.Module):
-
     @classmethod
-    def collate_fn(cls,
-                   batch: List[dict],
-                   encoders_collate_fns: Dict[str, CollateFnType]) -> TensorInterchange:
+    def collate_fn(
+        cls, batch: List[dict], encoders_collate_fns: Dict[str, CollateFnType]
+    ) -> TensorInterchange:
         """
         Construct batches for all encoders
 
@@ -29,8 +29,7 @@ class MetricModel(nn.Module):
         :return:
         """
         result = dict(
-            (key, collate_fn(batch))
-            for key, collate_fn in encoders_collate_fns.items()
+            (key, collate_fn(batch)) for key, collate_fn in encoders_collate_fns.items()
         )
         return result
 
@@ -47,11 +46,7 @@ class MetricModel(nn.Module):
             total_size += encoder.embedding_size()
         return total_size
 
-    def __init__(
-            self,
-            encoders: Union[Encoder, Dict[str, Encoder]],
-            head: EncoderHead
-    ):
+    def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
         super(MetricModel, self).__init__()
 
         if not isinstance(encoders, dict):
@@ -74,20 +69,21 @@ class MetricModel(nn.Module):
 
         :return: neural network inputs
         """
-        return partial(MetricModel.collate_fn, encoders_collate_fns=dict(
-            (key, encoder.get_collate_fn())
-            for key, encoder in self.encoders.items()
-        ))
+        return partial(
+            MetricModel.collate_fn,
+            encoders_collate_fns=dict(
+                (key, encoder.get_collate_fn())
+                for key, encoder in self.encoders.items()
+            ),
+        )
 
     # -------------------------------------------
     # ---------- Inference methods --------------
     # -------------------------------------------
 
-    def encode(self,
-               inputs: Union[List[Any], Any],
-               batch_size=32,
-               to_numpy=True
-               ) -> Union[torch.Tensor, np.ndarray]:
+    def encode(
+        self, inputs: Union[List[Any], Any], batch_size=32, to_numpy=True
+    ) -> Union[torch.Tensor, np.ndarray]:
 
         """
         Encode data in batches
@@ -109,7 +105,7 @@ class MetricModel(nn.Module):
         all_embeddings = []
 
         for start_index in range(0, len(inputs), batch_size):
-            input_batch = inputs[start_index:start_index + batch_size]
+            input_batch = inputs[start_index : start_index + batch_size]
             features = collate_fn(input_batch)
             features = move_to_device(features, device)
 
@@ -132,8 +128,7 @@ class MetricModel(nn.Module):
 
     def forward(self, batch):
         embeddings = [
-            (key, encoder.forward(batch[key]))
-            for key, encoder in self.encoders.items()
+            (key, encoder.forward(batch[key])) for key, encoder in self.encoders.items()
         ]
         # Order embeddings by key name, to ensure reproduction
         embeddings = sorted(embeddings, key=lambda x: x[0])
@@ -155,11 +150,11 @@ class MetricModel(nn.Module):
 
     @classmethod
     def _get_head_path(cls, directory: str):
-        return os.path.join(directory, 'head')
+        return os.path.join(directory, "head")
 
     @classmethod
     def _get_encoders_path(cls, directory: str):
-        return os.path.join(directory, 'encoders')
+        return os.path.join(directory, "encoders")
 
     def save(self, output_path: str):
         head_path = self._get_head_path(output_path)
@@ -177,20 +172,16 @@ class MetricModel(nn.Module):
             encoder_path = os.path.join(encoders_path, encoder_key)
             os.mkdir(encoder_path)
             encoder.save(encoder_path)
-            encoders_config.append({
-                "key": encoder_key,
-                **save_class_import(encoder)
-            })
+            encoders_config.append({"key": encoder_key, **save_class_import(encoder)})
 
-        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
-            json.dump({
-                "encoders": encoders_config,
-                "head": head_config
-            }, f_out, indent=2)
+        with open(os.path.join(output_path, "config.json"), "w") as f_out:
+            json.dump(
+                {"encoders": encoders_config, "head": head_config}, f_out, indent=2
+            )
 
     @classmethod
-    def load(cls, input_path: str) -> 'MetricModel':
-        with open(os.path.join(input_path, 'config.json')) as f_in:
+    def load(cls, input_path: str) -> "MetricModel":
+        with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
 
         head_config = config["head"]
@@ -205,6 +196,8 @@ class MetricModel(nn.Module):
         for encoder_params in encoders_config:
             encoder_key = encoder_params["key"]
             encoder_class = restore_class(encoder_params)
-            encoders[encoder_key] = encoder_class.load(os.path.join(encoders_path, encoder_key))
+            encoders[encoder_key] = encoder_class.load(
+                os.path.join(encoders_path, encoder_key)
+            )
 
         return cls(head=head, encoders=encoders)

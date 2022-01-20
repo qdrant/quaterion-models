@@ -9,7 +9,8 @@ from gensim.models import FastText
 from gensim.models.fasttext import FastTextKeyedVectors
 from torch import Tensor
 
-from quaterion_models.encoder import Encoder, CollateFnType
+from quaterion_models.encoders import Encoder
+from quaterion_models.types import CollateFnType
 
 
 def load_fasttext_model(path):
@@ -25,7 +26,7 @@ def load_fasttext_model(path):
 
 
 class FasttextEncoder(Encoder):
-    aggregation_options = ['min', 'max', 'avg']
+    aggregation_options = ["min", "max", "avg"]
 
     def __init__(self, model_path: str, on_disk: bool, aggregations: List[str] = None):
         """
@@ -49,8 +50,7 @@ class FasttextEncoder(Encoder):
 
         # noinspection PyTypeChecker
         self.model: FastTextKeyedVectors = gensim.models.KeyedVectors.load(
-            model_path,
-            mmap='r' if self.on_disk else None
+            model_path, mmap="r" if self.on_disk else None
         )
 
     def trainable(self) -> bool:
@@ -68,11 +68,11 @@ class FasttextEncoder(Encoder):
 
     @classmethod
     def aggregate(cls, embeddings: Tensor, operation: str) -> Tensor:
-        if operation == 'avg':
+        if operation == "avg":
             return torch.mean(embeddings, dim=0)
-        if operation == 'max':
+        if operation == "max":
             return torch.max(embeddings, dim=0).values
-        if operation == 'min':
+        if operation == "min":
             return torch.min(embeddings, dim=0).values
 
         raise RuntimeError(f"Unknown operation: {operation}")
@@ -85,27 +85,38 @@ class FasttextEncoder(Encoder):
                 record_vectors = np.stack(token_vectors)
             else:
                 record_vectors = np.zeros((1, self.model.vector_size))
-            token_tensor = torch.tensor(record_vectors, device=self._device_tensor.device)
-            record_embedding = torch.cat([
-                self.aggregate(token_tensor, operation) for operation in self.aggregations
-            ])
+            token_tensor = torch.tensor(
+                record_vectors, device=self._device_tensor.device
+            )
+            record_embedding = torch.cat(
+                [
+                    self.aggregate(token_tensor, operation)
+                    for operation in self.aggregations
+                ]
+            )
             embeddings.append(record_embedding)
 
         return torch.stack(embeddings)
 
     def save(self, output_path: str):
-        model_path = os.path.join(output_path, 'fasttext.model')
-        self.model.save(model_path, separately=['vectors_ngrams', 'vectors', 'vectors_vocab'])
-        with open(os.path.join(output_path, 'config.json'), 'w') as f_out:
-            json.dump({
-                "on_disk": self.on_disk,
-                "aggregations": self.aggregations,
-            }, f_out, indent=2)
+        model_path = os.path.join(output_path, "fasttext.model")
+        self.model.save(
+            model_path, separately=["vectors_ngrams", "vectors", "vectors_vocab"]
+        )
+        with open(os.path.join(output_path, "config.json"), "w") as f_out:
+            json.dump(
+                {
+                    "on_disk": self.on_disk,
+                    "aggregations": self.aggregations,
+                },
+                f_out,
+                indent=2,
+            )
 
     @classmethod
-    def load(cls, input_path: str) -> 'Encoder':
-        model_path = os.path.join(input_path, 'fasttext.model')
-        with open(os.path.join(input_path, 'config.json')) as f_in:
+    def load(cls, input_path: str) -> "Encoder":
+        model_path = os.path.join(input_path, "fasttext.model")
+        with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
 
         return cls(model_path=model_path, **config)
