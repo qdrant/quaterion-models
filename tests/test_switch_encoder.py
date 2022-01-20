@@ -5,8 +5,9 @@ import numpy as np
 import torch
 from torch import Tensor
 
-from quaterion_models.encoder import Encoder, TensorInterchange, CollateFnType
+from quaterion_models.encoders import Encoder
 from quaterion_models.heads.empty_head import EmptyHead
+from quaterion_models.types import TensorInterchange, CollateFnType
 from quaterion_models.model import MetricModel
 from quaterion_models.encoders.switch_encoder import SwitchEncoder
 
