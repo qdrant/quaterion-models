@@ -5,15 +5,16 @@ from quaterion_models.heads.encoder_head import EncoderHead
 
 
 class SoftmaxEmbeddingsHead(EncoderHead):
-
     def output_size(self) -> int:
         return self.output_size_per_group * self.output_group
 
-    def __init__(self,
-                 output_groups: int,
-                 output_size_per_group: int,
-                 input_embedding_size: int,
-                 **kwargs):
+    def __init__(
+        self,
+        output_groups: int,
+        output_size_per_group: int,
+        input_embedding_size: int,
+        **kwargs
+    ):
 
         super(SoftmaxEmbeddingsHead, self).__init__(input_embedding_size, **kwargs)
 
@@ -21,7 +22,9 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         self.output_size_per_group = output_size_per_group
         self.projectors = []
 
-        self.projection_layer = Linear(self.input_embedding_size, self.output_size_per_group * self.output_groups)
+        self.projection_layer = Linear(
+            self.input_embedding_size, self.output_size_per_group * self.output_groups
+        )
 
     def forward(self, input_vectors: torch.Tensor):
         """

@@ -7,7 +7,8 @@ import numpy as np
 import torch
 from torch import nn
 
-from quaterion_models.encoders import Encoder, TensorInterchange, CollateFnType
+from quaterion_models.encoders import Encoder
+from quaterion_models.types import TensorInterchange, CollateFnType
 from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.utils.classes import save_class_import, restore_class
 from quaterion_models.utils.tensors import move_to_device
