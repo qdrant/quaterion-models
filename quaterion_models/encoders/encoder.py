@@ -1,9 +1,8 @@
-from typing import List, Any, Union, Dict, Tuple, Callable
-
 from torch import Tensor
 from torch import nn
 
 from quaterion_models.types import TensorInterchange, CollateFnType
+
 
 class Encoder(nn.Module):
     """

@@ -1,5 +1,3 @@
-from typing import Dict, Any
-
 import torch
 
 from quaterion_models.heads import EncoderHead
