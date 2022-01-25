@@ -9,14 +9,13 @@ def save_class_import(obj: Any) -> dict:
     :param obj:
     :return: serializable class info
     """
-    if obj.__module__ == '__main__':
-        logging.warning(f"Class {obj.__class__.__qualname__} is defined in a same file as training loop."
-                        f" It won't be possible to load it properly later.")
+    if obj.__module__ == "__main__":
+        logging.warning(
+            f"Class {obj.__class__.__qualname__} is defined in a same file as training loop."
+            f" It won't be possible to load it properly later."
+        )
 
-    return {
-        "module": obj.__module__,
-        "class": obj.__class__.__qualname__
-    }
+    return {"module": obj.__module__, "class": obj.__class__.__qualname__}
 
 
 def restore_class(data: dict) -> Any:
