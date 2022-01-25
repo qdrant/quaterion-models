@@ -13,7 +13,6 @@ from quaterion_models.encoders.switch_encoder import SwitchEncoder
 
 
 class TestEncoder(Encoder, ABC):
-
     def trainable(self) -> bool:
         return False
 
@@ -24,7 +23,7 @@ class TestEncoder(Encoder, ABC):
         pass
 
     @classmethod
-    def load(cls, input_path: str) -> 'Encoder':
+    def load(cls, input_path: str) -> "Encoder":
         return cls()
 
     @classmethod
@@ -36,19 +35,16 @@ class TestEncoder(Encoder, ABC):
 
 
 class EncoderA(TestEncoder):
-
     def forward(self, batch: TensorInterchange) -> Tensor:
         return torch.zeros(len(batch), self.embedding_size())
 
 
 class EncoderB(TestEncoder):
-
     def forward(self, batch: TensorInterchange) -> Tensor:
         return torch.ones(len(batch), self.embedding_size())
 
 
 class MySwitchEncoder(SwitchEncoder):
-
     @classmethod
     def encoder_selection(cls, record: Any) -> str:
         if record == "zeros":
@@ -58,26 +54,12 @@ class MySwitchEncoder(SwitchEncoder):
 
 
 def test_forward():
-    encoder = MySwitchEncoder({
-        'a': EncoderA(),
-        'b': EncoderB()
-    })
+    encoder = MySwitchEncoder({"a": EncoderA(), "b": EncoderB()})
 
-    model = MetricModel(
-        encoders=encoder,
-        head=EmptyHead(encoder.embedding_size())
-    )
-    batch = [
-        "zeros",
-        "zeros",
-        "ones",
-        "ones",
-        "zeros",
-        "zeros",
-        "ones"
-    ]
+    model = MetricModel(encoders=encoder, head=EmptyHead(encoder.embedding_size()))
+    batch = ["zeros", "zeros", "ones", "ones", "zeros", "zeros", "ones"]
 
     res = model.encode(batch)
 
     assert res.shape[0] == len(batch)
-    assert all(res[:, 0] == np.array([0., 0., 1., 1., 0., 0., 1.]))
+    assert all(res[:, 0] == np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0]))
