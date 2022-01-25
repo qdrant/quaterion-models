@@ -16,7 +16,7 @@ class GatedHead(EncoderHead):
         self.reset_parameters()
 
     def output_size(self) -> int:
-        return self.vector_size
+        return self.input_embedding_size
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
         """
