@@ -3,3 +3,4 @@ from quaterion_models.heads.empty_head import EmptyHead
 from quaterion_models.heads.gated_head import GatedHead
 from quaterion_models.heads.softmax_head import SoftmaxEmbeddingsHead
 from quaterion_models.heads.stacked_projection_head import StackedProjectionHead
+from quaterion_models.heads.widening_head import WideningHead

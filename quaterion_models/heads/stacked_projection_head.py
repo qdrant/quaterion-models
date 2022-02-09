@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Callable, Dict, List, Sequence, Union
 
 import torch
 import torch.nn as nn
@@ -26,9 +26,9 @@ class StackedProjectionHead(EncoderHead):
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn
 
-        self._stack = nn.ModuleList(
-            [nn.Linear(input_embedding_size, self._output_sizes[0])]
-        )
+        self._stack: Sequence[
+            Union[nn.Module, Callable[[torch.Tensor], torch.Tensor]]
+        ] = nn.ModuleList([nn.Linear(input_embedding_size, self._output_sizes[0])])
 
         if len(self._output_sizes) > 1:
             for i in range(1, len(self._output_sizes)):
@@ -45,17 +45,15 @@ class StackedProjectionHead(EncoderHead):
             :-1
         ]:  # do not apply activation function after the last layer
             x = layer(x)
-            x = F.__dict__[self._activation_fn](x)
+            x = vars(F)[self._activation_fn](x)
 
         x = self._stack[-1](x)
         return x
 
     def get_config_dict(self) -> Dict[str, Any]:
         config = super().get_config_dict()
-        return config.update(
+        config.update(
             {"output_sizes": self._output_sizes, "activation_fn": self._activation_fn}
         )
 
-
-if __name__ == "__main__":
-    print(StackedProjectionHead(10, [20, 30, 40]))
+        return config
