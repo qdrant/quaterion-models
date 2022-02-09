@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Sequence, Union
+from typing import Any, Dict, List
 
 import torch
 import torch.nn as nn
@@ -26,9 +26,11 @@ class StackedProjectionHead(EncoderHead):
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn
 
-        self._stack: Sequence[
-            Union[nn.Module, Callable[[torch.Tensor], torch.Tensor]]
-        ] = nn.ModuleList([nn.Linear(input_embedding_size, self._output_sizes[0])])
+        # `NN.ModuleList` has strange behavior in its type hinting, so you can safely ignore highlighting in your IDE
+        # https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/container.py#L135
+        self._stack = nn.ModuleList(
+            [nn.Linear(input_embedding_size, self._output_sizes[0])]
+        )
 
         if len(self._output_sizes) > 1:
             for i in range(1, len(self._output_sizes)):
