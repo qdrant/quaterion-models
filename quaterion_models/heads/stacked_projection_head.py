@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from quaterion_models.heads import EncoderHead
+from quaterion_models.modules import ActivationFromFnName
 
 
 class StackedProjectionHead(EncoderHead):
@@ -26,32 +27,25 @@ class StackedProjectionHead(EncoderHead):
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn
 
-        # `NN.ModuleList` has strange behavior in its type hinting, so you can safely ignore highlighting in your IDE
-        # https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/container.py#L135
-        self._stack = nn.ModuleList(
-            [nn.Linear(input_embedding_size, self._output_sizes[0])]
-        )
+        modules = [nn.Linear(input_embedding_size, self._output_sizes[0])]
 
         if len(self._output_sizes) > 1:
             for i in range(1, len(self._output_sizes)):
-                self._stack.append(
-                    nn.Linear(self._output_sizes[i - 1], self._output_sizes[i])
+                modules.extend(
+                    [
+                        ActivationFromFnName(self._activation_fn),
+                        nn.Linear(self._output_sizes[i - 1], self._output_sizes[i]),
+                    ]
                 )
+
+        self._stack = nn.Sequential(*modules)
 
     @property
     def output_size(self) -> int:
         return self._output_sizes[-1]
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
-        x = input_vectors
-        for layer in self._stack[
-            :-1
-        ]:  # do not apply activation function after the last layer
-            x = layer(x)
-            x = vars(F)[self._activation_fn](x)
-
-        x = self._stack[-1](x)
-        return x
+        return self._stack(input_vectors)
 
     def get_config_dict(self) -> Dict[str, Any]:
         config = super().get_config_dict()
