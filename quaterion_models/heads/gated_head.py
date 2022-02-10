@@ -15,6 +15,7 @@ class GatedHead(EncoderHead):
         self.gates = Parameter(torch.Tensor(self.input_embedding_size))
         self.reset_parameters()
 
+    @property
     def output_size(self) -> int:
         return self.input_embedding_size
 

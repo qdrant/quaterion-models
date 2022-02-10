@@ -11,6 +11,7 @@ class EncoderHead(nn.Module):
         super(EncoderHead, self).__init__()
         self.input_embedding_size = input_embedding_size
 
+    @property
     def output_size(self) -> int:
         raise NotImplementedError()
 
