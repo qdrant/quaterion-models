@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-import torch
 from quaterion_models.heads.stacked_projection_head import StackedProjectionHead
 
 
