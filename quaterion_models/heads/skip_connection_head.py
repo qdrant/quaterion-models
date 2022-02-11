@@ -27,9 +27,7 @@ class SkipConnectionHead(GatedHead):
         super().__init__(output_embedding_size)
         self._input_embedding_size = input_embedding_size
         self._output_embedding_size = output_embedding_size
-        self.fc = torch.nn.Linear(
-            input_embedding_size, self._output_embedding_size
-        )
+        self.fc = torch.nn.Linear(input_embedding_size, self._output_embedding_size)
         self.downsample = downsample
 
     @property
