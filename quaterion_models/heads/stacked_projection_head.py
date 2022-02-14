@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
 from quaterion_models.heads import EncoderHead
 from quaterion_models.modules import ActivationFromFnName
 
