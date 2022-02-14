@@ -1,46 +1,26 @@
-from typing import Optional
-
 import torch
 
-from torch import nn
+from torch.nn import Parameter
 
-from quaterion_models.heads import GatedHead
+from quaterion_models.heads import EncoderHead
 
 
-class SkipConnectionHead(GatedHead):
-    """Unites the idea of gated head and residual connections
-
-    Args:
-        input_embedding_size: size of input embedding
-        output_size: size of output
-        downsample: nn.Module instance to change identity size to successfully
-            perform addition with output at the end of the block
-
-    """
+class SkipConnectionHead(EncoderHead):
+    """Unites the idea of gated head and residual connections."""
 
     def __init__(
         self,
-        input_embedding_size: int,
-        output_size: Optional[int] = None,
-        downsample: Optional[nn.Module] = None,
+        input_embedding_size: int
     ):
-        if not output_size:
-            output_size = input_embedding_size
-        if output_size != input_embedding_size and not downsample:
-            raise ValueError(
-                "`downsample` has to be specified if `output_size` "
-                "is set and is not equal with `input_embedding_size`"
-            )
+        super().__init__(input_embedding_size)
+        self.gates = Parameter(torch.Tensor(self.input_embedding_size))
+        self.reset_parameters()
 
-        super().__init__(output_size)
-        self._input_embedding_size = input_embedding_size
-        self._output_embedding_size = output_size
-        self.fc = torch.nn.Linear(input_embedding_size, self._output_size)
-        self.downsample = downsample
+        self.fc = torch.nn.Linear(input_embedding_size, input_embedding_size)
 
     @property
     def output_size(self) -> int:
-        return self._output_size
+        return self.input_embedding_size
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
         """
@@ -48,14 +28,11 @@ class SkipConnectionHead(GatedHead):
             input_vectors: shape: (batch_size, input_embedding_size)
 
         Returns:
-            torch.Tensor: shape: (batch_size, output_size)
+            torch.Tensor: shape: (batch_size, input_embedding_size)
         """
-        identity = input_vectors
-        if self.downsample:
-            identity = self.downsample(identity)
-        return self.fc(input_vectors) * torch.tanh(self.gates) + identity
+        return self.fc(input_vectors) * torch.sigmoid(self.gates) + input_vectors
 
-    def get_config_dict(self):
-        config = super().get_config_dict()
-        config.update({"output_size": self.output_size, "downsample": self.downsample})
-        return config
+    def reset_parameters(self) -> None:
+        torch.nn.init.constant_(
+            self.gates, -4.
+        )  # -4. ensures that all vector components are disabled by default
