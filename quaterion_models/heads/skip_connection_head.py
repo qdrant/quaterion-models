@@ -8,10 +8,7 @@ from quaterion_models.heads import EncoderHead
 class SkipConnectionHead(EncoderHead):
     """Unites the idea of gated head and residual connections."""
 
-    def __init__(
-        self,
-        input_embedding_size: int
-    ):
+    def __init__(self, input_embedding_size: int):
         super().__init__(input_embedding_size)
         self.gates = Parameter(torch.Tensor(self.input_embedding_size))
         self.reset_parameters()
@@ -34,5 +31,5 @@ class SkipConnectionHead(EncoderHead):
 
     def reset_parameters(self) -> None:
         torch.nn.init.constant_(
-            self.gates, -4.
+            self.gates, -4.0
         )  # -4. ensures that all vector components are disabled by default
