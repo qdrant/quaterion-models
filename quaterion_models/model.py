@@ -122,7 +122,12 @@ class MetricModel(nn.Module):
             all_embeddings = torch.cat(all_embeddings, dim=0)
 
         if not input_was_list:
-            all_embeddings = all_embeddings[0]
+            all_embeddings = all_embeddings.squeeze()
+
+        if to_numpy:
+            all_embeddings = np.atleast_2d(all_embeddings)
+        else:
+            all_embeddings = torch.atleast_2d(all_embeddings)
 
         return all_embeddings
 
