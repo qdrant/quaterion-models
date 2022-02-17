@@ -1,5 +1,6 @@
 from torch import Tensor
 from torch import nn
+from torch.utils.data.dataloader import default_collate
 
 from quaterion_models.types import TensorInterchange, CollateFnType
 
@@ -40,7 +41,7 @@ class Encoder(nn.Module):
 
         :return: Model input
         """
-        raise NotImplementedError()
+        return default_collate
 
     def forward(self, batch: TensorInterchange) -> Tensor:
         """
