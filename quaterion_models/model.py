@@ -19,7 +19,6 @@ DEFAULT_ENCODER_KEY = "default"
 
 
 class MetricModel(nn.Module):
-
     def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
         super(MetricModel, self).__init__()
 
