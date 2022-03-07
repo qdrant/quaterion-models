@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 from functools import partial
@@ -17,16 +19,31 @@ DEFAULT_ENCODER_KEY = "default"
 
 
 class MetricModel(nn.Module):
+
+    def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
+        super(MetricModel, self).__init__()
+
+        if not isinstance(encoders, dict):
+            self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
+        else:
+            self.encoders: Dict[str, Encoder] = encoders
+
+        for key, encoder in self.encoders.items():
+            encoder.disable_gradients_if_required()
+            self.add_module(key, encoder)
+
+        self.head = head
+
     @classmethod
     def collate_fn(
-        cls, batch: List[dict], encoders_collate_fns: Dict[str, CollateFnType]
-    ) -> TensorInterchange:
-        """
-        Construct batches for all encoders
+        cls, batch: List[dict], encoders_collate_fns: Dict[str, "CollateFnType"]
+    ) -> "TensorInterchange":
+        """Construct batches for all encoders
 
         :param batch:
         :param encoders_collate_fns: Dict (or single) of collate functions associated with encoders
         :return:
+
         """
         result = dict(
             (key, collate_fn(batch)) for key, collate_fn in encoders_collate_fns.items()
@@ -45,20 +62,6 @@ class MetricModel(nn.Module):
         for encoder in encoders:
             total_size += encoder.embedding_size()
         return total_size
-
-    def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
-        super(MetricModel, self).__init__()
-
-        if not isinstance(encoders, dict):
-            self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
-        else:
-            self.encoders: Dict[str, Encoder] = encoders
-
-        for key, encoder in self.encoders.items():
-            encoder.disable_gradients_if_required()
-            self.add_module(key, encoder)
-
-        self.head = head
 
     def train(self, mode: bool = True):
         super(MetricModel, self).train(mode)
@@ -185,7 +188,7 @@ class MetricModel(nn.Module):
             )
 
     @classmethod
-    def load(cls, input_path: str) -> "MetricModel":
+    def load(cls, input_path: str) -> MetricModel:
         with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
 

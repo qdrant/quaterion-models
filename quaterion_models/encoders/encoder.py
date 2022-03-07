@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from torch import Tensor
 from torch import nn
 from torch.utils.data.dataloader import default_collate
@@ -62,7 +64,7 @@ class Encoder(nn.Module):
         raise NotImplementedError()
 
     @classmethod
-    def load(cls, input_path: str) -> "Encoder":
+    def load(cls, input_path: str) -> Encoder:
         """
         Instantiate encoder from saved state.
         If no state required - just call `create` instead
