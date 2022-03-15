@@ -53,9 +53,10 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EncoderHead.get_config_dict"><a class="viewcode-back" href="../../../quaterion_models.heads.encoder_head.html#quaterion_models.heads.encoder_head.EncoderHead.get_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Constructs savable parameters dict</span>
-<span class="sd">        :return: Serializable parameters for __init__ of the Module</span>
+        <span class="sd">&quot;&quot;&quot;Constructs savable params dict</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Serializable parameters for __init__ of the Module</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;input_embedding_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_embedding_size</span><span class="p">}</span></div>
 
