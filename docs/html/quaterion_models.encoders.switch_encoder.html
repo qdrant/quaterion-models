@@ -44,8 +44,7 @@ In this case image encoder should be used if input is an image and text encoder 
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.disable_gradients_if_required">
 <span class="sig-name descname"><span class="pre">disable_gradients_if_required</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.disable_gradients_if_required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.disable_gradients_if_required" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disables gradients of the model if it is declared as not trainable
-:return:</p>
+<dd><p>Disables gradients of the model if it is declared as not trainable</p>
 </dd></dl>
 
 <dl class="py method">
@@ -81,7 +80,7 @@ In this case image encoder should be used if input is an image and text encoder 
 <dd class="field-odd"><p><strong>batch</strong> – processed batch</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>embeddings, shape: [batch_size x embedding_size]</p>
+<dd class="field-even"><p><em>embeddings</em> – shape: (batch_size, embedding_size)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -100,14 +99,11 @@ In this case image encoder should be used if input is an image and text encoder 
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.load">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder" title="quaterion_models.encoders.encoder.Encoder"><span class="pre">Encoder</span></a></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiate encoder from saved state.
-If no state required - just call <cite>create</cite> instead</p>
+<dd><p>Instantiate encoder from saved state.</p>
+<p>If no state required - just call <cite>create</cite> instead</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_path</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-odd"><p><strong>input_path</strong> – path to load from</p>
 </dd>
 </dl>
 </dd></dl>
@@ -118,10 +114,7 @@ If no state required - just call <cite>create</cite> instead</p>
 <dd><p>Persist current state to the provided directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>output_path</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-odd"><p><strong>output_path</strong> – path to save model</p>
 </dd>
 </dl>
 </dd></dl>
@@ -134,8 +127,13 @@ If no state required - just call <cite>create</cite> instead</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable">
 <span class="sig-name descname"><span class="pre">trainable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.trainable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines if encoder is trainable. This flag affects caching and checkpoint saving of the encoder.
-:return: bool</p>
+<dd><p>Defines if encoder is trainable. This flag affects caching and checkpoint saving of the
+encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">

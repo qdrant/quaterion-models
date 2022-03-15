@@ -42,69 +42,71 @@
 
 
 <div class="viewcode-block" id="Encoder"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder">[docs]</a><span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class for encoder abstraction</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Base class for encoder abstraction&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Encoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Encoder.disable_gradients_if_required"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.disable_gradients_if_required">[docs]</a>    <span class="k">def</span> <span class="nf">disable_gradients_if_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Disables gradients of the model if it is declared as not trainable</span>
-<span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Disables gradients of the model if it is declared as not trainable&quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainable</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">weights</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
                 <span class="n">weights</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Encoder.trainable"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.trainable">[docs]</a>    <span class="k">def</span> <span class="nf">trainable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Defines if encoder is trainable. This flag affects caching and checkpoint saving of the encoder.</span>
-<span class="sd">        :return: bool</span>
+        <span class="sd">&quot;&quot;&quot;Defines if encoder is trainable. This flag affects caching and checkpoint saving of the</span>
+<span class="sd">        encoder.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Encoder.embedding_size"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.embedding_size">[docs]</a>    <span class="k">def</span> <span class="nf">embedding_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: Size of resulting embedding</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Size of resulting embedding</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Encoder.get_collate_fn"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.get_collate_fn">[docs]</a>    <span class="k">def</span> <span class="nf">get_collate_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollateFnType</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Provides function that converts raw data batch into suitable model input</span>
+        <span class="sd">&quot;&quot;&quot;Provides function that converts raw data batch into suitable model input</span>
 
-<span class="sd">        :return: Model input</span>
+<span class="sd">        Returns:</span>
+<span class="sd">             Model input</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">default_collate</span></div>
 
 <div class="viewcode-block" id="Encoder.forward"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">TensorInterchange</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Infer encoder - convert input batch to embeddings</span>
+        <span class="sd">&quot;&quot;&quot;Infer encoder - convert input batch to embeddings</span>
 
-<span class="sd">        :param batch: processed batch</span>
-<span class="sd">        :return: embeddings, shape: [batch_size x embedding_size]</span>
+<span class="sd">        Args:</span>
+<span class="sd">            batch: processed batch</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            embeddings: shape: (batch_size, embedding_size)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Encoder.save"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Persist current state to the provided directory</span>
+        <span class="sd">&quot;&quot;&quot;Persist current state to the provided directory</span>
 
-<span class="sd">        :param output_path:</span>
-<span class="sd">        :return:</span>
+<span class="sd">        Args:</span>
+<span class="sd">            output_path: path to save model</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Encoder.load"><a class="viewcode-back" href="../../../quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Encoder</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Instantiate encoder from saved state.</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate encoder from saved state.</span>
+
 <span class="sd">        If no state required - just call `create` instead</span>
 
-<span class="sd">        :param input_path:</span>
-<span class="sd">        :return:</span>
+<span class="sd">        Args:</span>
+<span class="sd">            input_path: path to load from</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
 </pre></div>

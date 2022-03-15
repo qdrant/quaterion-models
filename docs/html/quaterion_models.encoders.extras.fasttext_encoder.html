@@ -38,6 +38,19 @@
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FasttextEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_disk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#FasttextEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder" title="quaterion_models.encoders.encoder.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Encoder</span></code></a></p>
+<p>Creates a fasttext encoder, which generates vector for a list of tokens based in given
+fasttext model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> – Path to model to load</p></li>
+<li><p><strong>on_disk</strong> – If True - use mmap to keep embeddings out of RAM</p></li>
+<li><p><strong>aggregations</strong> – What types of aggregations to use to combine multiple vectors into one. If
+multiple aggregations are specified - concatenation of all of them will be used as a
+result.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregate">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embeddings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#FasttextEncoder.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregate" title="Permalink to this definition">¶</a></dt>
@@ -62,7 +75,7 @@
 <dd class="field-odd"><p><strong>batch</strong> – processed batch</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>embeddings, shape: [batch_size x embedding_size]</p>
+<dd class="field-even"><p><em>embeddings</em> – shape: (batch_size, embedding_size)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -86,14 +99,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.load">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder" title="quaterion_models.encoders.encoder.Encoder"><span class="pre">Encoder</span></a></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#FasttextEncoder.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiate encoder from saved state.
-If no state required - just call <cite>create</cite> instead</p>
+<dd><p>Instantiate encoder from saved state.</p>
+<p>If no state required - just call <cite>create</cite> instead</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_path</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-odd"><p><strong>input_path</strong> – path to load from</p>
 </dd>
 </dl>
 </dd></dl>
@@ -104,10 +114,7 @@ If no state required - just call <cite>create</cite> instead</p>
 <dd><p>Persist current state to the provided directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>output_path</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-odd"><p><strong>output_path</strong> – path to save model</p>
 </dd>
 </dl>
 </dd></dl>
@@ -115,8 +122,13 @@ If no state required - just call <cite>create</cite> instead</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.trainable">
 <span class="sig-name descname"><span class="pre">trainable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#FasttextEncoder.trainable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.trainable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines if encoder is trainable. This flag affects caching and checkpoint saving of the encoder.
-:return: bool</p>
+<dd><p>Defines if encoder is trainable. This flag affects caching and checkpoint saving of the
+encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
