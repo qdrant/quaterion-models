@@ -4,7 +4,18 @@ from quaterion_models.heads.stacked_projection_head import StackedProjectionHead
 
 
 class WideningHead(StackedProjectionHead):
-    """Implements narrow-wide-narrow architecture."""
+    """Implements narrow-wide-narrow architecture.
+
+    Widen the dimensionality by a factor of `expension_factor` and narrow it down back to
+    `input_embedding_size`.
+
+    Args:
+        input_embedding_size: Dimensionality of the input to this head layer.
+        expansion_factor: Widen the dimensionality by this factor in the intermediate layer.
+        activation_fn: Name of the activation function to apply after the intermediate layer.
+            Must be an attribute of `torch.nn.functional` and defaults to `relu`.
+
+    """
 
     def __init__(
         self,
@@ -12,13 +23,6 @@ class WideningHead(StackedProjectionHead):
         expansion_factor: float = 4.0,
         activation_fn: str = "relu",
     ):
-        """Widen the dimensionality by a factor of `expension_factor` and narrow it down back to `input_embedding_size`.
-
-        Args:
-            input_embedding_size (int): Dimensionality of the input to this head layer.
-            expansion_factor (float, optional): Widen the dimensionality by this factor in the intermediate layer. Defaults to 4.0.
-            activation_fn (str, optional): Name of the activation function to apply after the intermediate layer. Must be an attribute of `torch.nn.functional` and defaults to `relu`.
-        """
         self._expansion_factor = expansion_factor
         self._activation_fn = activation_fn
         super(WideningHead, self).__init__(
