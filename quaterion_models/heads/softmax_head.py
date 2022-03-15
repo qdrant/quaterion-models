@@ -30,8 +30,11 @@ class SoftmaxEmbeddingsHead(EncoderHead):
     def forward(self, input_vectors: torch.Tensor):
         """
 
-        :param input_vectors: shape: [batch_size, ..., input_dim]
-        :return: shape [batch_size, ..., self.output_size_per_group * self.output_groups]
+        Args:
+            input_vectors: shape: (batch_size, ..., input_dim)
+
+        Returns:
+            shape (batch_size, ..., self.output_size_per_group * self.output_groups)
         """
 
         # shape: [batch_size, ..., self.output_size_per_group * self.output_groups]
