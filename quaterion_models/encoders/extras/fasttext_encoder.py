@@ -39,6 +39,7 @@ class FasttextEncoder(Encoder):
             result.
 
     """
+
     aggregation_options = ["min", "max", "avg"]
 
     def __init__(self, model_path: str, on_disk: bool, aggregations: List[str] = None):
