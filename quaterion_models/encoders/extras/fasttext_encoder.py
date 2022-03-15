@@ -28,18 +28,20 @@ def load_fasttext_model(path):
 
 
 class FasttextEncoder(Encoder):
+    """Creates a fasttext encoder, which generates vector for a list of tokens based in given
+    fasttext model
+
+    Args:
+        model_path: Path to model to load
+        on_disk: If True - use mmap to keep embeddings out of RAM
+        aggregations: What types of aggregations to use to combine multiple vectors into one. If
+            multiple aggregations are specified - concatenation of all of them will be used as a
+            result.
+
+    """
     aggregation_options = ["min", "max", "avg"]
 
     def __init__(self, model_path: str, on_disk: bool, aggregations: List[str] = None):
-        """
-        Creates a fasttext encoder, which generates vector for a list of tokens based in given fasttext model
-
-        :param model_path:
-        :param on_disk: If True - use mmap to keep embeddings out of RAM
-        :param aggregations:
-            What types of aggregations to use to combine multiple vectors into one
-            If multiple aggregations are specified - concatenation of all of them will be used as a result.
-        """
         super(FasttextEncoder, self).__init__()
 
         # workaround tensor to keep information about required model device
@@ -116,7 +118,7 @@ class FasttextEncoder(Encoder):
             )
 
     @classmethod
-    def load(cls, input_path: str) -> "Encoder":
+    def load(cls, input_path: str) -> Encoder:
         model_path = os.path.join(input_path, "fasttext.model")
         with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
