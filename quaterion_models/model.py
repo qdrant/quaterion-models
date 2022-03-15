@@ -15,6 +15,7 @@ from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.utils.classes import save_class_import, restore_class
 from quaterion_models.utils.tensors import move_to_device
 
+
 DEFAULT_ENCODER_KEY = "default"
 
 
@@ -35,13 +36,13 @@ class MetricModel(nn.Module):
 
     @classmethod
     def collate_fn(
-        cls, batch: List[dict], encoders_collate_fns: Dict[str, "CollateFnType"]
-    ) -> "TensorInterchange":
+        cls, batch: List[dict], encoders_collate_fns: Dict[str, CollateFnType]
+    ) -> TensorInterchange:
         """Construct batches for all encoders
 
-        :param batch:
-        :param encoders_collate_fns: Dict (or single) of collate functions associated with encoders
-        :return:
+        Args:
+            batch:
+            encoders_collate_fns: Dict (or single) of collate functions associated with encoders
 
         """
         result = dict(
@@ -51,10 +52,11 @@ class MetricModel(nn.Module):
 
     @classmethod
     def get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
-        """
-        Calculate total output size of given encoders
-        :param encoders:
-        :return:
+        """Calculate total output size of given encoders
+
+        Args:
+            encoders:
+
         """
         encoders = encoders.values() if isinstance(encoders, dict) else [encoders]
         total_size = 0
@@ -66,10 +68,10 @@ class MetricModel(nn.Module):
         super(MetricModel, self).train(mode)
 
     def get_collate_fn(self) -> Callable:
-        """
-        Construct a function to convert input data into neural network inputs
+        """Construct a function to convert input data into neural network inputs
 
-        :return: neural network inputs
+        Returns:
+            neural network inputs
         """
         return partial(
             MetricModel.collate_fn,
@@ -86,14 +88,15 @@ class MetricModel(nn.Module):
     def encode(
         self, inputs: Union[List[Any], Any], batch_size=32, to_numpy=True
     ) -> Union[torch.Tensor, np.ndarray]:
+        """Encode data in batches
 
-        """
-        Encode data in batches
+        Args:
+            inputs: list of input data to encode
+            batch_size:
+            to_numpy:
 
-        :param inputs: list of input data to encode
-        :param batch_size:
-        :param to_numpy:
-        :return: Numpy array or torch.Tensor of shape [input_size x embedding_size]
+        Returns:
+            Numpy array or torch.Tensor of shape (input_size, embedding_size)
         """
         self.eval()
         device = next(self.parameters(), torch.tensor(0)).device
