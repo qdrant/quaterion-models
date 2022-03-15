@@ -5,9 +5,10 @@ from quaterion_models.heads import EncoderHead
 
 
 class GatedHead(EncoderHead):
-    """
-    Disables or amplifies some components of input embedding.
-    This layer have minimal amount of trainable parameters and is suitable for even small training sets.
+    """Disables or amplifies some components of input embedding.
+
+    This layer has minimal amount of trainable parameters and is suitable for even small training
+    sets.
     """
 
     def __init__(self, input_embedding_size: int):
@@ -22,8 +23,11 @@ class GatedHead(EncoderHead):
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
         """
 
-        :param input_vectors: shape: (batch_size * vector_size)
-        :return: (batch_size * vector_size)
+        Args:
+            input_vectors: shape: (batch_size, vector_size)
+
+        Returns:
+            Tensor: (batch_size, vector_size)
         """
         return input_vectors * torch.tanh(self.gates)
 
