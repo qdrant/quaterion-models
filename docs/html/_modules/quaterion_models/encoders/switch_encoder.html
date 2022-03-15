@@ -54,19 +54,21 @@
 
 
 <div class="viewcode-block" id="SwitchEncoder"><a class="viewcode-back" href="../../../quaterion_models.encoders.switch_encoder.html#quaterion_models.encoders.switch_encoder.SwitchEncoder">[docs]</a><span class="k">class</span> <span class="nc">SwitchEncoder</span><span class="p">(</span><span class="n">Encoder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Allows use alternative embeddings based on input data.</span>
+    <span class="sd">&quot;&quot;&quot;Allows use alternative embeddings based on input data.</span>
+
 <span class="sd">    For example, train shared embedding representation for images and texts.</span>
 <span class="sd">    In this case image encoder should be used if input is an image and text encoder in other case.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SwitchEncoder.encoder_selection"><a class="viewcode-back" href="../../../quaterion_models.encoders.switch_encoder.html#quaterion_models.encoders.switch_encoder.SwitchEncoder.encoder_selection">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">encoder_selection</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Decide which encoder to use for given record.</span>
+        <span class="sd">&quot;&quot;&quot;Decide which encoder to use for given record.</span>
 
-<span class="sd">        :param record: input piece of data</span>
-<span class="sd">        :return: name of the related encoder</span>
+<span class="sd">        Args:</span>
+<span class="sd">            record: input piece of data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            name of the related encoder</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
