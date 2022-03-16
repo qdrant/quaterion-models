@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import json
 import os
-from typing import List, Any
+from typing import List, Any, Union
 
 import gensim
 import numpy as np
 import torch
-from gensim.models import FastText
+from gensim.models import FastText, KeyedVectors
 from gensim.models.fasttext import FastTextKeyedVectors
 from torch import Tensor
 
@@ -15,7 +15,18 @@ from quaterion_models.encoders import Encoder
 from quaterion_models.types import CollateFnType
 
 
-def load_fasttext_model(path):
+def load_fasttext_model(path: str) -> Union[FastText, KeyedVectors]:
+    """Load fasttext model in a universal way
+
+    Try to find possible way of loading FastText model and load it
+
+    Args:
+        path: path to FastText model or vectors
+
+    Returns:
+        :class:`~gensim.models.fasttext.FastText` or :class:`~gensim.models.KeyedVectors`:
+        loaded model
+    """
     try:
         model = FastText.load(path).wv
     except Exception:
@@ -73,6 +84,15 @@ class FasttextEncoder(Encoder):
 
     @classmethod
     def aggregate(cls, embeddings: Tensor, operation: str) -> Tensor:
+        """Apply aggregation operation to embeddings along the first dimension
+
+        Args:
+            embeddings: embeddings to aggregate
+            operation: one of :attr:`aggregation_options`
+
+        Returns:
+            Tensor: aggregated embeddings
+        """
         if operation == "avg":
             return torch.mean(embeddings, dim=0)
         if operation == "max":
