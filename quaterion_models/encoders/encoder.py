@@ -41,7 +41,7 @@ class Encoder(nn.Module):
         """Provides function that converts raw data batch into suitable model input
 
         Returns:
-             Model input
+             :const:`~quaterion_models.types.CollateFnType`: model's collate function
         """
         return default_collate
 
@@ -73,5 +73,7 @@ class Encoder(nn.Module):
         Args:
             input_path: path to load from
 
+        Returns:
+            :class:`~quaterion_models.encoders.encoder.Encoder`: loaded encoder
         """
         raise NotImplementedError()
