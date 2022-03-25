@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 import json
 import os
-from typing import List, Any
+from typing import List, Any, Union
 
 import gensim
 import numpy as np
 import torch
-from gensim.models import FastText
+from gensim.models import FastText, KeyedVectors
 from gensim.models.fasttext import FastTextKeyedVectors
 from torch import Tensor
 
@@ -13,7 +15,18 @@ from quaterion_models.encoders import Encoder
 from quaterion_models.types import CollateFnType
 
 
-def load_fasttext_model(path):
+def load_fasttext_model(path: str) -> Union[FastText, KeyedVectors]:
+    """Load fasttext model in a universal way
+
+    Try to find possible way of loading FastText model and load it
+
+    Args:
+        path: path to FastText model or vectors
+
+    Returns:
+        :class:`~gensim.models.fasttext.FastText` or :class:`~gensim.models.KeyedVectors`:
+        loaded model
+    """
     try:
         model = FastText.load(path).wv
     except Exception:
@@ -26,18 +39,21 @@ def load_fasttext_model(path):
 
 
 class FasttextEncoder(Encoder):
+    """Creates a fasttext encoder, which generates vector for a list of tokens based in given
+    fasttext model
+
+    Args:
+        model_path: Path to model to load
+        on_disk: If True - use mmap to keep embeddings out of RAM
+        aggregations: What types of aggregations to use to combine multiple vectors into one. If
+            multiple aggregations are specified - concatenation of all of them will be used as a
+            result.
+
+    """
+
     aggregation_options = ["min", "max", "avg"]
 
     def __init__(self, model_path: str, on_disk: bool, aggregations: List[str] = None):
-        """
-        Creates a fasttext encoder, which generates vector for a list of tokens based in given fasttext model
-
-        :param model_path:
-        :param on_disk: If True - use mmap to keep embeddings out of RAM
-        :param aggregations:
-            What types of aggregations to use to combine multiple vectors into one
-            If multiple aggregations are specified - concatenation of all of them will be used as a result.
-        """
         super(FasttextEncoder, self).__init__()
 
         # workaround tensor to keep information about required model device
@@ -68,6 +84,15 @@ class FasttextEncoder(Encoder):
 
     @classmethod
     def aggregate(cls, embeddings: Tensor, operation: str) -> Tensor:
+        """Apply aggregation operation to embeddings along the first dimension
+
+        Args:
+            embeddings: embeddings to aggregate
+            operation: one of :attr:`aggregation_options`
+
+        Returns:
+            Tensor: aggregated embeddings
+        """
         if operation == "avg":
             return torch.mean(embeddings, dim=0)
         if operation == "max":
@@ -114,7 +139,7 @@ class FasttextEncoder(Encoder):
             )
 
     @classmethod
-    def load(cls, input_path: str) -> "Encoder":
+    def load(cls, input_path: str) -> Encoder:
         model_path = os.path.join(input_path, "fasttext.model")
         with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)

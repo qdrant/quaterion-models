@@ -3,6 +3,7 @@ from typing import Union, Tuple, List, Dict, Any, Callable
 
 from torch import Tensor
 
+#:
 TensorInterchange = Union[
     Tensor,
     Tuple[Tensor],
@@ -11,4 +12,5 @@ TensorInterchange = Union[
     Dict[str, dict],
     Any,
 ]
+#:
 CollateFnType = Callable[[List[Any]], TensorInterchange]

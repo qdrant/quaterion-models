@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 from functools import partial
@@ -18,19 +20,21 @@ def inverse_permutation(perm):
 
 
 class SwitchEncoder(Encoder):
-    """
-    Allows use alternative embeddings based on input data.
+    """Allows use alternative embeddings based on input data.
+
     For example, train shared embedding representation for images and texts.
     In this case image encoder should be used if input is an image and text encoder in other case.
     """
 
     @classmethod
     def encoder_selection(cls, record: Any) -> str:
-        """
-        Decide which encoder to use for given record.
+        """Decide which encoder to use for given record.
 
-        :param record: input piece of data
-        :return: name of the related encoder
+        Args:
+            record: input piece of data
+
+        Returns:
+            name of the related encoder
         """
         raise NotImplementedError()
 

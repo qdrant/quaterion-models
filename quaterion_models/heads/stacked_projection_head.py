@@ -8,7 +8,14 @@ from quaterion_models.modules import ActivationFromFnName
 
 
 class StackedProjectionHead(EncoderHead):
-    """Stacks any number of projection layers with specified output sizes."""
+    """Stacks any number of projection layers with specified output sizes.
+
+    Args:
+        input_embedding_size: Dimensionality of the input to this stack of layers.
+        output_sizes: List of output sizes for each one of the layers stacked.
+        activation_fn: Name of the activation function to apply between the layers stacked.
+            Must be an attribute of `torch.nn.functional` and defaults to `relu`.
+    """
 
     def __init__(
         self,
@@ -16,13 +23,6 @@ class StackedProjectionHead(EncoderHead):
         output_sizes: List[int],
         activation_fn: str = "relu",
     ):
-        """Initialize a stack of `nn.Linear` layers with specified output sizes and an activation function in between.
-
-        Args:
-            input_embedding_size (int): Dimensionality of the input to this stack of layers.
-            output_sizes (List[int]): List of output sizes for each one of the layers stacked.
-            activation_fn (str, optional): Name of the activation function to apply between the layers stacked. Must be an attribute of `torch.nn.functional` and defaults to `relu`.
-        """
         super(StackedProjectionHead, self).__init__(input_embedding_size)
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn

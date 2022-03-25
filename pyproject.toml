@@ -21,6 +21,7 @@ gensim = {version = "^4.1.2", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+Sphinx = "^4.4.0"
 
 [tool.poetry.extras]
 fasttext = ["gensim"]

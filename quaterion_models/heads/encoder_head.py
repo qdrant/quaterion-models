@@ -19,9 +19,10 @@ class EncoderHead(nn.Module):
         raise NotImplementedError()
 
     def get_config_dict(self) -> Dict[str, Any]:
-        """
-        Constructs savable parameters dict
-        :return: Serializable parameters for __init__ of the Module
+        """Constructs savable params dict
+
+        Returns:
+            Serializable parameters for __init__ of the Module
         """
         return {"input_embedding_size": self.input_embedding_size}
 
