@@ -87,12 +87,9 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_css_files = [
-    "quaterion_models.css",
-    "css/custom.css"
-]
+html_css_files = ["quaterion_models.css", "css/custom.css"]
 
 html_sidebars = {
-   '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html'],
-   'using/windows': ['windowssidebar.html', 'searchbox.html'],
+    "**": ["globaltoc.html", "sourcelink.html", "searchbox.html"],
+    "using/windows": ["windowssidebar.html", "searchbox.html"],
 }
