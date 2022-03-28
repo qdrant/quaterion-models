@@ -25,6 +25,7 @@ Sphinx = "^4.4.0"
 
 [tool.poetry.extras]
 fasttext = ["gensim"]
+docs = ["Sphinx", "sphinx_rtd_theme"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]
