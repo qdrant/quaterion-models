@@ -45,7 +45,7 @@ class SwitchEncoder(Encoder):
         embedding_sizes = set()
         for key, encoder in self.options.items():
             self.add_module(key, encoder)
-            embedding_sizes.add(encoder.embedding_size())
+            embedding_sizes.add(encoder.embedding_size)
 
         if len(embedding_sizes) != 1:
             raise RuntimeError(
@@ -58,9 +58,11 @@ class SwitchEncoder(Encoder):
         for encoder in self.options.values():
             encoder.disable_gradients_if_required()
 
+    @property
     def trainable(self) -> bool:
-        return any(encoder.trainable() for encoder in self.options.values())
+        return any(encoder.trainable for encoder in self.options.values())
 
+    @property
     def embedding_size(self) -> int:
         return self._embedding_size
 
