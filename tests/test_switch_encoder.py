@@ -36,12 +36,12 @@ class TestEncoder(Encoder, ABC):
 
 class EncoderA(TestEncoder):
     def forward(self, batch: TensorInterchange) -> Tensor:
-        return torch.zeros(len(batch), self.embedding_size())
+        return torch.zeros(len(batch), self.embedding_size)
 
 
 class EncoderB(TestEncoder):
     def forward(self, batch: TensorInterchange) -> Tensor:
-        return torch.ones(len(batch), self.embedding_size())
+        return torch.ones(len(batch), self.embedding_size)
 
 
 class MySwitchEncoder(SwitchEncoder):
@@ -56,7 +56,7 @@ class MySwitchEncoder(SwitchEncoder):
 def test_forward():
     encoder = MySwitchEncoder({"a": EncoderA(), "b": EncoderB()})
 
-    model = MetricModel(encoders=encoder, head=EmptyHead(encoder.embedding_size()))
+    model = MetricModel(encoders=encoder, head=EmptyHead(encoder.embedding_size))
     batch = ["zeros", "zeros", "ones", "ones", "zeros", "zeros", "ones"]
 
     res = model.encode(batch)
