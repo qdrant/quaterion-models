@@ -38,14 +38,16 @@
 
 
 <div class="viewcode-block" id="ActivationFromFnName"><a class="viewcode-back" href="../../../quaterion_models.modules.simple.html#quaterion_models.modules.simple.ActivationFromFnName">[docs]</a><span class="k">class</span> <span class="nc">ActivationFromFnName</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Simple module constructed from function name to be used in `nn.Sequential`&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Simple module constructed from function name to be used in `nn.Sequential`</span>
+
+<span class="sd">    Construct a `nn.Module` that applies the specified activation function to inputs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        activation_fn: Name of the activation function to apply to input.</span>
+<span class="sd">            Must be an attribute of `torch.nn.functional`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Construct a `nn.Module` that applies the specified activation function to inputs</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            activation_fn (str): Name of the activation function to apply to inputs. Must be an attribute of `torch.nn.functional`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
 

@@ -39,9 +39,10 @@
 
 
 <div class="viewcode-block" id="GatedHead"><a class="viewcode-back" href="../../../quaterion_models.heads.gated_head.html#quaterion_models.heads.gated_head.GatedHead">[docs]</a><span class="k">class</span> <span class="nc">GatedHead</span><span class="p">(</span><span class="n">EncoderHead</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Disables or amplifies some components of input embedding.</span>
-<span class="sd">    This layer have minimal amount of trainable parameters and is suitable for even small training sets.</span>
+    <span class="sd">&quot;&quot;&quot;Disables or amplifies some components of input embedding.</span>
+
+<span class="sd">    This layer has minimal amount of trainable parameters and is suitable for even small training</span>
+<span class="sd">    sets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_embedding_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
@@ -56,8 +57,11 @@
 <div class="viewcode-block" id="GatedHead.forward"><a class="viewcode-back" href="../../../quaterion_models.heads.gated_head.html#quaterion_models.heads.gated_head.GatedHead.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_vectors</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        :param input_vectors: shape: (batch_size * vector_size)</span>
-<span class="sd">        :return: (batch_size * vector_size)</span>
+<span class="sd">        Args:</span>
+<span class="sd">            input_vectors: shape: (batch_size, vector_size)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: (batch_size, vector_size)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">input_vectors</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span></div>
 

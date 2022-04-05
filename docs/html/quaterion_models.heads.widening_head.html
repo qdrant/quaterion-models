@@ -39,6 +39,18 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WideningHead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_embedding_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'relu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/heads/widening_head.html#WideningHead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.heads.widening_head.WideningHead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="quaterion_models.heads.stacked_projection_head.html#quaterion_models.heads.stacked_projection_head.StackedProjectionHead" title="quaterion_models.heads.stacked_projection_head.StackedProjectionHead"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackedProjectionHead</span></code></a></p>
 <p>Implements narrow-wide-narrow architecture.</p>
+<p>Widen the dimensionality by a factor of <cite>expension_factor</cite> and narrow it down back to
+<cite>input_embedding_size</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_embedding_size</strong> – Dimensionality of the input to this head layer.</p></li>
+<li><p><strong>expansion_factor</strong> – Widen the dimensionality by this factor in the intermediate layer.</p></li>
+<li><p><strong>activation_fn</strong> – Name of the activation function to apply after the intermediate layer.
+Must be an attribute of <cite>torch.nn.functional</cite> and defaults to <cite>relu</cite>.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.heads.widening_head.WideningHead.get_config_dict">
 <span class="sig-name descname"><span class="pre">get_config_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/quaterion_models/heads/widening_head.html#WideningHead.get_config_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.heads.widening_head.WideningHead.get_config_dict" title="Permalink to this definition">¶</a></dt>

@@ -48,16 +48,6 @@ In this case image encoder should be used if input is an image and text encoder 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.embedding_size">
-<span class="sig-name descname"><span class="pre">embedding_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.embedding_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.embedding_size" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Size of resulting embedding</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.encoder_selection">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">encoder_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.encoder_selection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.encoder_selection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decide which encoder to use for given record.</p>
@@ -91,7 +81,7 @@ In this case image encoder should be used if input is an image and text encoder 
 <dd><p>Provides function that converts raw data batch into suitable model input</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Model input</p>
+<dd class="field-odd"><p><a class="reference internal" href="quaterion_models.types.html#quaterion_models.types.CollateFnType" title="quaterion_models.types.CollateFnType"><code class="xref py py-const docutils literal notranslate"><span class="pre">CollateFnType</span></code></a> – model’s collate function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -104,6 +94,9 @@ In this case image encoder should be used if input is an image and text encoder 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>input_path</strong> – path to load from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder" title="quaterion_models.encoders.encoder.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Encoder</span></code></a> – loaded encoder</p>
 </dd>
 </dl>
 </dd></dl>
@@ -124,16 +117,17 @@ In this case image encoder should be used if input is an image and text encoder 
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">switch_collate_fn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.switch_collate_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.switch_collate_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
+<dl class="py property">
+<dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.embedding_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">embedding_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.embedding_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of resulting embedding</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable">
-<span class="sig-name descname"><span class="pre">trainable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/switch_encoder.html#SwitchEncoder.trainable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines if encoder is trainable. This flag affects caching and checkpoint saving of the
-encoder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trainable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines if encoder is trainable.</p>
+<p>This flag affects caching and checkpoint saving of the encoder.</p>
 </dd></dl>
 
 <dl class="py attribute">

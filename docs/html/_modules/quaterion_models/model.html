@@ -49,6 +49,7 @@
 <span class="kn">from</span> <span class="nn">quaterion_models.utils.classes</span> <span class="kn">import</span> <span class="n">save_class_import</span><span class="p">,</span> <span class="n">restore_class</span>
 <span class="kn">from</span> <span class="nn">quaterion_models.utils.tensors</span> <span class="kn">import</span> <span class="n">move_to_device</span>
 
+
 <span class="n">DEFAULT_ENCODER_KEY</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
 
 
@@ -69,13 +70,13 @@
 
 <div class="viewcode-block" id="MetricModel.collate_fn"><a class="viewcode-back" href="../../quaterion_models.model.html#quaterion_models.model.MetricModel.collate_fn">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">collate_fn</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">encoders_collate_fns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;CollateFnType&quot;</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TensorInterchange&quot;</span><span class="p">:</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">encoders_collate_fns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CollateFnType</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorInterchange</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Construct batches for all encoders</span>
 
-<span class="sd">        :param batch:</span>
-<span class="sd">        :param encoders_collate_fns: Dict (or single) of collate functions associated with encoders</span>
-<span class="sd">        :return:</span>
+<span class="sd">        Args:</span>
+<span class="sd">            batch:</span>
+<span class="sd">            encoders_collate_fns: Dict (or single) of collate functions associated with encoders</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -85,25 +86,26 @@
 
 <div class="viewcode-block" id="MetricModel.get_encoders_output_size"><a class="viewcode-back" href="../../quaterion_models.model.html#quaterion_models.model.MetricModel.get_encoders_output_size">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_encoders_output_size</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">encoders</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Encoder</span><span class="p">]]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate total output size of given encoders</span>
-<span class="sd">        :param encoders:</span>
-<span class="sd">        :return:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate total output size of given encoders</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            encoders:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">encoders</span> <span class="o">=</span> <span class="n">encoders</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">encoders</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">encoders</span><span class="p">]</span>
         <span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="n">encoders</span><span class="p">:</span>
-            <span class="n">total_size</span> <span class="o">+=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">embedding_size</span><span class="p">()</span>
+            <span class="n">total_size</span> <span class="o">+=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">embedding_size</span>
         <span class="k">return</span> <span class="n">total_size</span></div>
 
 <div class="viewcode-block" id="MetricModel.train"><a class="viewcode-back" href="../../quaterion_models.model.html#quaterion_models.model.MetricModel.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MetricModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MetricModel.get_collate_fn"><a class="viewcode-back" href="../../quaterion_models.model.html#quaterion_models.model.MetricModel.get_collate_fn">[docs]</a>    <span class="k">def</span> <span class="nf">get_collate_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Construct a function to convert input data into neural network inputs</span>
+        <span class="sd">&quot;&quot;&quot;Construct a function to convert input data into neural network inputs</span>
 
-<span class="sd">        :return: neural network inputs</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            neural network inputs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">partial</span><span class="p">(</span>
             <span class="n">MetricModel</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">,</span>
@@ -120,14 +122,15 @@
 <div class="viewcode-block" id="MetricModel.encode"><a class="viewcode-back" href="../../quaterion_models.model.html#quaterion_models.model.MetricModel.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">to_numpy</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Encode data in batches</span>
 
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Encode data in batches</span>
+<span class="sd">        Args:</span>
+<span class="sd">            inputs: list of input data to encode</span>
+<span class="sd">            batch_size:</span>
+<span class="sd">            to_numpy:</span>
 
-<span class="sd">        :param inputs: list of input data to encode</span>
-<span class="sd">        :param batch_size:</span>
-<span class="sd">        :param to_numpy:</span>
-<span class="sd">        :return: Numpy array or torch.Tensor of shape [input_size x embedding_size]</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Numpy array or torch.Tensor of shape (input_size, embedding_size)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="n">device</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">device</span>

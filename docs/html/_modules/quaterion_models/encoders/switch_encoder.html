@@ -79,7 +79,7 @@
         <span class="n">embedding_sizes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">encoder</span><span class="p">)</span>
-            <span class="n">embedding_sizes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">embedding_size</span><span class="p">())</span>
+            <span class="n">embedding_sizes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">embedding_size</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">embedding_sizes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -92,11 +92,13 @@
         <span class="k">for</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">encoder</span><span class="o">.</span><span class="n">disable_gradients_if_required</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SwitchEncoder.trainable"><a class="viewcode-back" href="../../../quaterion_models.encoders.switch_encoder.html#quaterion_models.encoders.switch_encoder.SwitchEncoder.trainable">[docs]</a>    <span class="k">def</span> <span class="nf">trainable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">trainable</span><span class="p">()</span> <span class="k">for</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trainable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">trainable</span> <span class="k">for</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
-<div class="viewcode-block" id="SwitchEncoder.embedding_size"><a class="viewcode-back" href="../../../quaterion_models.encoders.switch_encoder.html#quaterion_models.encoders.switch_encoder.SwitchEncoder.embedding_size">[docs]</a>    <span class="k">def</span> <span class="nf">embedding_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_size</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">embedding_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_size</span>
 
 <div class="viewcode-block" id="SwitchEncoder.switch_collate_fn"><a class="viewcode-back" href="../../../quaterion_models.encoders.switch_encoder.html#quaterion_models.encoders.switch_encoder.SwitchEncoder.switch_collate_fn">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">switch_collate_fn</span><span class="p">(</span>

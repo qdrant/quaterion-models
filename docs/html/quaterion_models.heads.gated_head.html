@@ -38,17 +38,18 @@
 <dt class="sig sig-object py" id="quaterion_models.heads.gated_head.GatedHead">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GatedHead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_embedding_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/heads/gated_head.html#GatedHead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.heads.gated_head.GatedHead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="quaterion_models.heads.encoder_head.html#quaterion_models.heads.encoder_head.EncoderHead" title="quaterion_models.heads.encoder_head.EncoderHead"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderHead</span></code></a></p>
-<p>Disables or amplifies some components of input embedding.
-This layer have minimal amount of trainable parameters and is suitable for even small training sets.</p>
+<p>Disables or amplifies some components of input embedding.</p>
+<p>This layer has minimal amount of trainable parameters and is suitable for even small training
+sets.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.heads.gated_head.GatedHead.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_vectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/quaterion_models/heads/gated_head.html#GatedHead.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.heads.gated_head.GatedHead.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_vectors</strong> – shape: (batch_size * vector_size)</p>
+<dd class="field-odd"><p><strong>input_vectors</strong> – shape: (batch_size, vector_size)</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(batch_size * vector_size)</p>
+<dd class="field-even"><p><em>Tensor</em> – (batch_size, vector_size)</p>
 </dd>
 </dl>
 </dd></dl>
