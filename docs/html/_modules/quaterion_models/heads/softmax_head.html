@@ -64,8 +64,11 @@
 <div class="viewcode-block" id="SoftmaxEmbeddingsHead.forward"><a class="viewcode-back" href="../../../quaterion_models.heads.softmax_head.html#quaterion_models.heads.softmax_head.SoftmaxEmbeddingsHead.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_vectors</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">        :param input_vectors: shape: [batch_size, ..., input_dim]</span>
-<span class="sd">        :return: shape [batch_size, ..., self.output_size_per_group * self.output_groups]</span>
+<span class="sd">        Args:</span>
+<span class="sd">            input_vectors: shape: (batch_size, ..., input_dim)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            shape (batch_size, ..., self.output_size_per_group * self.output_groups)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># shape: [batch_size, ..., self.output_size_per_group * self.output_groups]</span>

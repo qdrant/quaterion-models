@@ -39,6 +39,13 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActivationFromFnName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activation_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/modules/simple.html#ActivationFromFnName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.modules.simple.ActivationFromFnName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Simple module constructed from function name to be used in <cite>nn.Sequential</cite></p>
+<p>Construct a <cite>nn.Module</cite> that applies the specified activation function to inputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>activation_fn</strong> – Name of the activation function to apply to input.
+Must be an attribute of <cite>torch.nn.functional</cite>.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.modules.simple.ActivationFromFnName.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/quaterion_models/modules/simple.html#ActivationFromFnName.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.modules.simple.ActivationFromFnName.forward" title="Permalink to this definition">¶</a></dt>

@@ -38,7 +38,18 @@
 
 
 <div class="viewcode-block" id="WideningHead"><a class="viewcode-back" href="../../../quaterion_models.heads.widening_head.html#quaterion_models.heads.widening_head.WideningHead">[docs]</a><span class="k">class</span> <span class="nc">WideningHead</span><span class="p">(</span><span class="n">StackedProjectionHead</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implements narrow-wide-narrow architecture.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Implements narrow-wide-narrow architecture.</span>
+
+<span class="sd">    Widen the dimensionality by a factor of `expension_factor` and narrow it down back to</span>
+<span class="sd">    `input_embedding_size`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_embedding_size: Dimensionality of the input to this head layer.</span>
+<span class="sd">        expansion_factor: Widen the dimensionality by this factor in the intermediate layer.</span>
+<span class="sd">        activation_fn: Name of the activation function to apply after the intermediate layer.</span>
+<span class="sd">            Must be an attribute of `torch.nn.functional` and defaults to `relu`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -46,13 +57,6 @@
         <span class="n">expansion_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span>
         <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Widen the dimensionality by a factor of `expension_factor` and narrow it down back to `input_embedding_size`.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            input_embedding_size (int): Dimensionality of the input to this head layer.</span>
-<span class="sd">            expansion_factor (float, optional): Widen the dimensionality by this factor in the intermediate layer. Defaults to 4.0.</span>
-<span class="sd">            activation_fn (str, optional): Name of the activation function to apply after the intermediate layer. Must be an attribute of `torch.nn.functional` and defaults to `relu`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_factor</span> <span class="o">=</span> <span class="n">expansion_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">WideningHead</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>

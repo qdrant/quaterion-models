@@ -42,7 +42,14 @@
 
 
 <div class="viewcode-block" id="StackedProjectionHead"><a class="viewcode-back" href="../../../quaterion_models.heads.stacked_projection_head.html#quaterion_models.heads.stacked_projection_head.StackedProjectionHead">[docs]</a><span class="k">class</span> <span class="nc">StackedProjectionHead</span><span class="p">(</span><span class="n">EncoderHead</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Stacks any number of projection layers with specified output sizes.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Stacks any number of projection layers with specified output sizes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_embedding_size: Dimensionality of the input to this stack of layers.</span>
+<span class="sd">        output_sizes: List of output sizes for each one of the layers stacked.</span>
+<span class="sd">        activation_fn: Name of the activation function to apply between the layers stacked.</span>
+<span class="sd">            Must be an attribute of `torch.nn.functional` and defaults to `relu`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -50,13 +57,6 @@
         <span class="n">output_sizes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize a stack of `nn.Linear` layers with specified output sizes and an activation function in between.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            input_embedding_size (int): Dimensionality of the input to this stack of layers.</span>
-<span class="sd">            output_sizes (List[int]): List of output sizes for each one of the layers stacked.</span>
-<span class="sd">            activation_fn (str, optional): Name of the activation function to apply between the layers stacked. Must be an attribute of `torch.nn.functional` and defaults to `relu`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StackedProjectionHead</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">input_embedding_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_sizes</span> <span class="o">=</span> <span class="n">output_sizes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>

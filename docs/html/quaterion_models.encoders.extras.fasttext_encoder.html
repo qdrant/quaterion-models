@@ -54,7 +54,19 @@ result.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregate">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embeddings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#FasttextEncoder.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Apply aggregation operation to embeddings along the first dimension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>embeddings</strong> – embeddings to aggregate</p></li>
+<li><p><strong>operation</strong> – one of <a class="reference internal" href="#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregation_options" title="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregation_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">aggregation_options</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Tensor</em> – aggregated embeddings</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.embedding_size">
@@ -86,7 +98,7 @@ result.</p></li>
 <dd><p>Provides function that converts raw data batch into suitable model input</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Model input</p>
+<dd class="field-odd"><p><a class="reference internal" href="quaterion_models.types.html#quaterion_models.types.CollateFnType" title="quaterion_models.types.CollateFnType"><code class="xref py py-const docutils literal notranslate"><span class="pre">CollateFnType</span></code></a> – model’s collate function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -104,6 +116,9 @@ result.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>input_path</strong> – path to load from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="quaterion_models.encoders.encoder.html#quaterion_models.encoders.encoder.Encoder" title="quaterion_models.encoders.encoder.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Encoder</span></code></a> – loaded encoder</p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,8 +160,18 @@ encoder.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="quaterion_models.encoders.extras.fasttext_encoder.load_fasttext_model">
-<span class="sig-name descname"><span class="pre">load_fasttext_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#load_fasttext_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.load_fasttext_model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">load_fasttext_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://radimrehurek.com/gensim/models/fasttext.html#gensim.models.fasttext.FastText" title="(in gensim v4.1)"><span class="pre">FastText</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://radimrehurek.com/gensim/models/keyedvectors.html#gensim.models.keyedvectors.KeyedVectors" title="(in gensim v4.1)"><span class="pre">KeyedVectors</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/quaterion_models/encoders/extras/fasttext_encoder.html#load_fasttext_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quaterion_models.encoders.extras.fasttext_encoder.load_fasttext_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load fasttext model in a universal way</p>
+<p>Try to find possible way of loading FastText model and load it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – path to FastText model or vectors</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://radimrehurek.com/gensim/models/fasttext.html#gensim.models.fasttext.FastText" title="(in gensim v4.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">FastText</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">KeyedVectors</span></code> – loaded model</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 

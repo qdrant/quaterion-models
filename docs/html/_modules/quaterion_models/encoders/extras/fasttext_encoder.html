@@ -36,12 +36,12 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">gensim</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">FastText</span>
+<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">FastText</span><span class="p">,</span> <span class="n">KeyedVectors</span>
 <span class="kn">from</span> <span class="nn">gensim.models.fasttext</span> <span class="kn">import</span> <span class="n">FastTextKeyedVectors</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 
@@ -49,7 +49,18 @@
 <span class="kn">from</span> <span class="nn">quaterion_models.types</span> <span class="kn">import</span> <span class="n">CollateFnType</span>
 
 
-<div class="viewcode-block" id="load_fasttext_model"><a class="viewcode-back" href="../../../../quaterion_models.encoders.extras.fasttext_encoder.html#quaterion_models.encoders.extras.fasttext_encoder.load_fasttext_model">[docs]</a><span class="k">def</span> <span class="nf">load_fasttext_model</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="load_fasttext_model"><a class="viewcode-back" href="../../../../quaterion_models.encoders.extras.fasttext_encoder.html#quaterion_models.encoders.extras.fasttext_encoder.load_fasttext_model">[docs]</a><span class="k">def</span> <span class="nf">load_fasttext_model</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">FastText</span><span class="p">,</span> <span class="n">KeyedVectors</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Load fasttext model in a universal way</span>
+
+<span class="sd">    Try to find possible way of loading FastText model and load it</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: path to FastText model or vectors</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :class:`~gensim.models.fasttext.FastText` or :class:`~gensim.models.KeyedVectors`:</span>
+<span class="sd">        loaded model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">FastText</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">wv</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -107,6 +118,15 @@
 
 <div class="viewcode-block" id="FasttextEncoder.aggregate"><a class="viewcode-back" href="../../../../quaterion_models.encoders.extras.fasttext_encoder.html#quaterion_models.encoders.extras.fasttext_encoder.FasttextEncoder.aggregate">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">aggregate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Apply aggregation operation to embeddings along the first dimension</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            embeddings: embeddings to aggregate</span>
+<span class="sd">            operation: one of :attr:`aggregation_options`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor: aggregated embeddings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;avg&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
