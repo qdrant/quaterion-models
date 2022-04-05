@@ -16,25 +16,21 @@ class Encoder(nn.Module):
     def disable_gradients_if_required(self):
         """Disables gradients of the model if it is declared as not trainable"""
 
-        if not self.trainable():
-            for key, weights in self.named_parameters():
+        if not self.trainable:
+            for _, weights in self.named_parameters():
                 weights.requires_grad = False
 
+    @property
     def trainable(self) -> bool:
-        """Defines if encoder is trainable. This flag affects caching and checkpoint saving of the
-        encoder.
+        """Defines if encoder is trainable.
 
-        Returns:
-            bool
+        This flag affects caching and checkpoint saving of the encoder.
         """
         raise NotImplementedError()
 
+    @property
     def embedding_size(self) -> int:
-        """
-
-        Returns:
-            Size of resulting embedding
-        """
+        """Size of resulting embedding"""
         raise NotImplementedError()
 
     def get_collate_fn(self) -> CollateFnType:

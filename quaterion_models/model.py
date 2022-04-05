@@ -61,7 +61,7 @@ class MetricModel(nn.Module):
         encoders = encoders.values() if isinstance(encoders, dict) else [encoders]
         total_size = 0
         for encoder in encoders:
-            total_size += encoder.embedding_size()
+            total_size += encoder.embedding_size
         return total_size
 
     def train(self, mode: bool = True):
