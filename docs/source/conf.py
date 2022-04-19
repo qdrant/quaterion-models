@@ -104,7 +104,7 @@ html_theme_options = {
     "collapse_navigation": True,
     "sticky_navigation": True,
     "titles_only": False,
-    "qdrant_project": "qdrant_client"
+    "qdrant_project": "quaterion-models"
 }
 
 # default is false
