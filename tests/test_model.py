@@ -1,4 +1,3 @@
-import json
 import os
 import tempfile
 from multiprocessing import Pool
@@ -20,6 +19,7 @@ class LambdaHead(EncoderHead):
         super(LambdaHead, self).__init__(TEST_EMB_SIZE)
         self.my_lambda = lambda x: "hello"
 
+    @property
     def output_size(self) -> int:
         return 0
 
@@ -27,7 +27,7 @@ class LambdaHead(EncoderHead):
         return input_vectors
 
 
-class TestEncoder(Encoder):
+class CustomEncoder(Encoder):
     def save(self, output_path: str):
         pass
 
@@ -39,9 +39,11 @@ class TestEncoder(Encoder):
         super().__init__()
         self.unpickable = lambda x: x + 1
 
+    @property
     def trainable(self) -> bool:
         return False
 
+    @property
     def embedding_size(self) -> int:
         return TEST_EMB_SIZE
 
@@ -65,7 +67,7 @@ class Tst:
 
 
 def test_get_collate_fn():
-    model = MetricModel(encoders={"test": TestEncoder()}, head=LambdaHead())
+    model = MetricModel(encoders={"test": CustomEncoder()}, head=LambdaHead())
 
     tester = Tst(foo=model.get_collate_fn())
 
@@ -85,7 +87,7 @@ def test_get_collate_fn():
 
 def test_model_save_and_load():
     tempdir = tempfile.TemporaryDirectory()
-    model = MetricModel(encoders={"test": TestEncoder()}, head=EmptyHead(100))
+    model = MetricModel(encoders={"test": CustomEncoder()}, head=EmptyHead(100))
 
     model.save(tempdir.name)
 

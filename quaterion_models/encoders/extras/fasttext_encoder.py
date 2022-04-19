@@ -69,9 +69,11 @@ class FasttextEncoder(Encoder):
             model_path, mmap="r" if self.on_disk else None
         )
 
+    @property
     def trainable(self) -> bool:
         return False
 
+    @property
     def embedding_size(self) -> int:
         return self.model.vector_size * len(self.aggregations)
 

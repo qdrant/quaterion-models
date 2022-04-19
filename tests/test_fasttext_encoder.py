@@ -30,7 +30,7 @@ def test_fasttext_encoder():
         model_path=model_path, on_disk=False, aggregations=["avg", "max"]
     )
 
-    assert encoder.embedding_size() == 20
+    assert encoder.embedding_size == 20
 
     embeddings = encoder.forward([["aaa", "123"], ["aaa", "ccc"]])
 
