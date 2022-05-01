@@ -11,8 +11,8 @@ class GatedHead(EncoderHead):
     sets.
     """
 
-    def __init__(self, input_embedding_size: int):
-        super(GatedHead, self).__init__(input_embedding_size)
+    def __init__(self, input_embedding_size: int, dropout=0.0):
+        super(GatedHead, self).__init__(input_embedding_size, dropout=dropout)
         self.gates = Parameter(torch.Tensor(self.input_embedding_size))
         self.reset_parameters()
 
@@ -20,7 +20,7 @@ class GatedHead(EncoderHead):
     def output_size(self) -> int:
         return self.input_embedding_size
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
         """
 
         Args:

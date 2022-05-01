@@ -22,8 +22,11 @@ class StackedProjectionHead(EncoderHead):
         input_embedding_size: int,
         output_sizes: List[int],
         activation_fn: str = "relu",
+        dropout=0.0,
     ):
-        super(StackedProjectionHead, self).__init__(input_embedding_size)
+        super(StackedProjectionHead, self).__init__(
+            input_embedding_size, dropout=dropout
+        )
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn
 
@@ -44,7 +47,7 @@ class StackedProjectionHead(EncoderHead):
     def output_size(self) -> int:
         return self._output_sizes[-1]
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
         return self._stack(input_vectors)
 
     def get_config_dict(self) -> Dict[str, Any]:

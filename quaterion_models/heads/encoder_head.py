@@ -7,16 +7,32 @@ from torch import nn
 
 
 class EncoderHead(nn.Module):
-    def __init__(self, input_embedding_size: int, **kwargs):
+    def __init__(self, input_embedding_size: int, dropout=0.0, **kwargs):
         super(EncoderHead, self).__init__()
         self.input_embedding_size = input_embedding_size
+        self._dropout_prob = dropout
+        self.dropout = (
+            torch.nn.Dropout(p=dropout) if dropout > 0.0 else torch.nn.Identity()
+        )
 
     @property
     def output_size(self) -> int:
         raise NotImplementedError()
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
+        """Apply head-specific transformations to the embeddings tensor.
+        Called as part of `forward` function, but with generic wrappings
+
+        Args:
+            input_vectors: Concatenated embeddings of all encoders. Shape: (batch_size, self.input_embedding_size)
+
+        Returns:
+            Final embeddings for a batch: (batch_size, self.output_size)
+        """
         raise NotImplementedError()
+
+    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+        return self.transform(self.dropout(input_vectors))
 
     def get_config_dict(self) -> Dict[str, Any]:
         """Constructs savable params dict
@@ -24,7 +40,10 @@ class EncoderHead(nn.Module):
         Returns:
             Serializable parameters for __init__ of the Module
         """
-        return {"input_embedding_size": self.input_embedding_size}
+        return {
+            "input_embedding_size": self.input_embedding_size,
+            "dropout": self._dropout_prob,
+        }
 
     def save(self, output_path):
         torch.save(self.state_dict(), os.path.join(output_path, "weights.bin"))
