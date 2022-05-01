@@ -14,7 +14,8 @@ class WideningHead(StackedProjectionHead):
         expansion_factor: Widen the dimensionality by this factor in the intermediate layer.
         activation_fn: Name of the activation function to apply after the intermediate layer.
             Must be an attribute of `torch.nn.functional` and defaults to `relu`.
-
+        dropout: Probability of Dropout. If `dropout > 0.`, apply dropout layer
+            on embeddings before applying head layer transformations
     """
 
     def __init__(
@@ -22,7 +23,7 @@ class WideningHead(StackedProjectionHead):
         input_embedding_size: int,
         expansion_factor: float = 4.0,
         activation_fn: str = "relu",
-        dropout=0.0,
+        dropout: float = 0.0,
         **kwargs
     ):
         self._expansion_factor = expansion_factor

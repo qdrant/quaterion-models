@@ -11,7 +11,7 @@ class GatedHead(EncoderHead):
     sets.
     """
 
-    def __init__(self, input_embedding_size: int, dropout=0.0):
+    def __init__(self, input_embedding_size: int, dropout: float = 0.0):
         super(GatedHead, self).__init__(input_embedding_size, dropout=dropout)
         self.gates = Parameter(torch.Tensor(self.input_embedding_size))
         self.reset_parameters()

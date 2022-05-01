@@ -12,7 +12,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         output_groups: int,
         output_size_per_group: int,
         input_embedding_size: int,
-        dropout=0.0,
+        dropout: float = 0.0,
         **kwargs
     ):
         super(SoftmaxEmbeddingsHead, self).__init__(

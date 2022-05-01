@@ -7,7 +7,19 @@ from torch import nn
 
 
 class EncoderHead(nn.Module):
-    def __init__(self, input_embedding_size: int, dropout=0.0, **kwargs):
+    """Base class for the final layer of fine-tuned model.
+    EncoderHead is the only trainable component in case of frozen encoders.
+
+    Args:
+        input_embedding_size:
+            Size of the concatenated embedding, obtained from combination of all configured encoders
+        dropout:
+            Probability of Dropout. If `dropout > 0.`, apply dropout layer
+            on embeddings before applying head layer transformations
+        **kwargs:
+    """
+
+    def __init__(self, input_embedding_size: int, dropout: float = 0.0, **kwargs):
         super(EncoderHead, self).__init__()
         self.input_embedding_size = input_embedding_size
         self._dropout_prob = dropout
