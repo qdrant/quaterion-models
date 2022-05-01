@@ -63,7 +63,10 @@ class SkipConnectionHead(EncoderHead):
         Returns:
             torch.Tensor: shape: (batch_size, input_embedding_size)
         """
-        return self.fc(self.skip_dropout(input_vectors)) * torch.sigmoid(self.gates) + input_vectors
+        return (
+            self.fc(self.skip_dropout(input_vectors)) * torch.sigmoid(self.gates)
+            + input_vectors
+        )
 
     def reset_parameters(self) -> None:
         torch.nn.init.constant_(
