@@ -15,6 +15,8 @@ class StackedProjectionHead(EncoderHead):
         output_sizes: List of output sizes for each one of the layers stacked.
         activation_fn: Name of the activation function to apply between the layers stacked.
             Must be an attribute of `torch.nn.functional` and defaults to `relu`.
+        dropout: Probability of Dropout. If `dropout > 0.`, apply dropout layer
+            on embeddings before applying head layer transformations
     """
 
     def __init__(
@@ -22,8 +24,11 @@ class StackedProjectionHead(EncoderHead):
         input_embedding_size: int,
         output_sizes: List[int],
         activation_fn: str = "relu",
+        dropout: float = 0.0,
     ):
-        super(StackedProjectionHead, self).__init__(input_embedding_size)
+        super(StackedProjectionHead, self).__init__(
+            input_embedding_size, dropout=dropout
+        )
         self._output_sizes = output_sizes
         self._activation_fn = activation_fn
 
@@ -44,7 +49,7 @@ class StackedProjectionHead(EncoderHead):
     def output_size(self) -> int:
         return self._output_sizes[-1]
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
         return self._stack(input_vectors)
 
     def get_config_dict(self) -> Dict[str, Any]:

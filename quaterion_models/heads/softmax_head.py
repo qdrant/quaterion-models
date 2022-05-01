@@ -1,3 +1,5 @@
+from typing import Dict, Any
+
 import torch
 from torch.nn import Linear
 
@@ -10,10 +12,12 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         output_groups: int,
         output_size_per_group: int,
         input_embedding_size: int,
+        dropout: float = 0.0,
         **kwargs
     ):
-
-        super(SoftmaxEmbeddingsHead, self).__init__(input_embedding_size, **kwargs)
+        super(SoftmaxEmbeddingsHead, self).__init__(
+            input_embedding_size, dropout=dropout, **kwargs
+        )
 
         self.output_groups = output_groups
         self.output_size_per_group = output_size_per_group
@@ -27,7 +31,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
     def output_size(self) -> int:
         return self.output_size_per_group * self.output_group
 
-    def forward(self, input_vectors: torch.Tensor):
+    def transform(self, input_vectors: torch.Tensor):
         """
 
         Args:
@@ -49,3 +53,14 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         grouped_projection = torch.softmax(projection.view(*groups_shape), dim=-1)
 
         return grouped_projection.view(init_shape)
+
+    def get_config_dict(self) -> Dict[str, Any]:
+        config = super().get_config_dict()
+        config.update(
+            {
+                "output_groups": self.output_groups,
+                "output_size_per_group": self.output_size_per_group,
+            }
+        )
+
+        return config

@@ -23,7 +23,7 @@ class LambdaHead(EncoderHead):
     def output_size(self) -> int:
         return 0
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
         return input_vectors
 
 
