@@ -110,7 +110,10 @@ class MetricModel(nn.Module):
         all_embeddings = []
 
         for start_index in range(0, len(inputs), batch_size):
-            input_batch = inputs[start_index : start_index + batch_size]
+            input_batch = [
+                inputs[i]
+                for i in range(start_index, min(len(inputs), start_index + batch_size))
+            ]
             features = collate_fn(input_batch)
             features = move_to_device(features, device)
 
