@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "quaterion-models"
-version = "0.1.7"
+version = "0.1.8"
 description = "The collection of building blocks building fine-tunable metric learning models"
 authors = ["generall <andrey@vasnetsov.com>"]
 packages = [
