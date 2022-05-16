@@ -21,7 +21,7 @@ DEFAULT_ENCODER_KEY = "default"
 
 class SimilarityModel(nn.Module):
     def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
-        super(SimilarityModel, self).__init__()
+        super().__init__()
 
         if not isinstance(encoders, dict):
             self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
