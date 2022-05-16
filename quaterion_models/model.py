@@ -65,7 +65,7 @@ class SimilarityModel(nn.Module):
         return total_size
 
     def train(self, mode: bool = True):
-        super(SimilarityModel, self).train(mode)
+        super().train(mode)
 
     def get_collate_fn(self) -> Callable:
         """Construct a function to convert input data into neural network inputs
