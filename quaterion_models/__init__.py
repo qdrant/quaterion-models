@@ -1,1 +1,1 @@
-from quaterion_models.model import MetricModel
+from quaterion_models.model import SimilarityModel

@@ -19,9 +19,9 @@ from quaterion_models.utils.tensors import move_to_device
 DEFAULT_ENCODER_KEY = "default"
 
 
-class MetricModel(nn.Module):
+class SimilarityModel(nn.Module):
     def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
-        super(MetricModel, self).__init__()
+        super().__init__()
 
         if not isinstance(encoders, dict):
             self.encoders: Dict[str, Encoder] = {DEFAULT_ENCODER_KEY: encoders}
@@ -65,7 +65,7 @@ class MetricModel(nn.Module):
         return total_size
 
     def train(self, mode: bool = True):
-        super(MetricModel, self).train(mode)
+        super().train(mode)
 
     def get_collate_fn(self) -> Callable:
         """Construct a function to convert input data into neural network inputs
@@ -74,7 +74,7 @@ class MetricModel(nn.Module):
             neural network inputs
         """
         return partial(
-            MetricModel.collate_fn,
+            SimilarityModel.collate_fn,
             encoders_collate_fns=dict(
                 (key, encoder.get_collate_fn())
                 for key, encoder in self.encoders.items()
@@ -193,7 +193,7 @@ class MetricModel(nn.Module):
             )
 
     @classmethod
-    def load(cls, input_path: str) -> MetricModel:
+    def load(cls, input_path: str) -> SimilarityModel:
         with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
 
@@ -214,3 +214,11 @@ class MetricModel(nn.Module):
             )
 
         return cls(head=head, encoders=encoders)
+
+
+# In this framework, the terms Metric Learning and Similarity Learning are considered synonymous.
+# However, the word "Metric" overlaps with other concepts in model training.
+# In addition, the semantics of the word "Similarity" are simpler.
+# It better reflects the basic idea of this training approach.
+# That's why we prefer to use Similarity over Metric.
+MetricModel = SimilarityModel

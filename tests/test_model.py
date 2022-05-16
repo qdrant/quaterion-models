@@ -9,7 +9,7 @@ from torch import Tensor
 from quaterion_models.encoders import Encoder
 from quaterion_models.types import TensorInterchange, CollateFnType
 from quaterion_models.heads import EmptyHead, EncoderHead
-from quaterion_models import MetricModel
+from quaterion_models import SimilarityModel
 
 TEST_EMB_SIZE = 5
 
@@ -67,7 +67,7 @@ class Tst:
 
 
 def test_get_collate_fn():
-    model = MetricModel(encoders={"test": CustomEncoder()}, head=LambdaHead())
+    model = SimilarityModel(encoders={"test": CustomEncoder()}, head=LambdaHead())
 
     tester = Tst(foo=model.get_collate_fn())
 
@@ -87,7 +87,7 @@ def test_get_collate_fn():
 
 def test_model_save_and_load():
     tempdir = tempfile.TemporaryDirectory()
-    model = MetricModel(encoders={"test": CustomEncoder()}, head=EmptyHead(100))
+    model = SimilarityModel(encoders={"test": CustomEncoder()}, head=EmptyHead(100))
 
     model.save(tempdir.name)
 
@@ -95,7 +95,7 @@ def test_model_save_and_load():
 
     assert os.path.exists(config_path)
 
-    loaded_model = MetricModel.load(tempdir.name)
+    loaded_model = SimilarityModel.load(tempdir.name)
 
     assert model.encoders.keys() == loaded_model.encoders.keys()
     assert [type(encoder) for encoder in model.encoders.values()] == [
