@@ -8,7 +8,7 @@ from torch import Tensor
 from quaterion_models.encoders import Encoder
 from quaterion_models.heads.empty_head import EmptyHead
 from quaterion_models.types import TensorInterchange, CollateFnType
-from quaterion_models.model import MetricModel
+from quaterion_models.model import SimilarityModel
 from quaterion_models.encoders.switch_encoder import SwitchEncoder
 
 
@@ -58,7 +58,7 @@ class CustomSwitchEncoder(SwitchEncoder):
 def test_forward():
     encoder = CustomSwitchEncoder({"a": EncoderA(), "b": EncoderB()})
 
-    model = MetricModel(encoders=encoder, head=EmptyHead(encoder.embedding_size))
+    model = SimilarityModel(encoders=encoder, head=EmptyHead(encoder.embedding_size))
     batch = ["zeros", "zeros", "ones", "ones", "zeros", "zeros", "ones"]
 
     res = model.encode(batch)

@@ -9,7 +9,7 @@ packages = [
 readme = "README.md"
 homepage = "https://github.com/qdrant/quaterion-models"
 repository = "https://github.com/qdrant/quaterion-models"
-keywords = ["framework", "metric-learning", "similarity", "deep-learning", "pytorch"]
+keywords = ["framework", "metric-learning", "similarity", "similarity-learning", "deep-learning", "pytorch"]
 
 
 [tool.poetry.dependencies]
