@@ -7,12 +7,22 @@ from quaterion_models.heads.encoder_head import EncoderHead
 class SequentialHead(EncoderHead):
     """A `torch.nn.Sequential`-like head layer that you can freely add any layers.
 
-    Unlike `torch.nn.Sequential`, it also requires the output size to be passed as an argument.
+    Unlike `torch.nn.Sequential`, it also expects the output size to be passed
+    as a required  keyword-only argument. It is required because some loss functions
+            may need this information.
 
     Args:
         args: Any sequence of `torch.nn.Module` instances. See `torch.nn.Sequential` for more info.
-        output_size: Final output dimension from this head. It is required because some loss functions
-            may need this information.
+        output_size: Final output dimension from this head.
+
+    Examples::
+
+        head = SequentialHed(
+            nn.Linear(10, 20),
+            nn.ReLU(),
+            nn.Linear(20, 30),
+            output_size=30
+        )
     """
 
     def __init__(self, *args, output_size: int):
