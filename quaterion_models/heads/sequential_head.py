@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 from quaterion_models.heads.encoder_head import EncoderHead
 
+
 class SequentialHead(EncoderHead):
     """A `torch.nn.Sequential`-like head layer that you can freely add any layers.
 
@@ -13,6 +14,7 @@ class SequentialHead(EncoderHead):
         output_size: Final output dimension from this head. It is required because some loss functions
             may need this information.
     """
+
     def __init__(self, *args, output_size: int):
         super().__init__(None)
         self._sequential = nn.Sequential(*args)
@@ -43,6 +45,6 @@ class SequentialHead(EncoderHead):
     def __iter__(self) -> Iterator[nn.Module]:
         return self._sequential.__iter__()
 
-    def append(self, module: nn.Module) -> 'SequentialHead':
+    def append(self, module: nn.Module) -> "SequentialHead":
         self._sequential.append(module)
         return self
