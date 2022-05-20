@@ -17,7 +17,7 @@ class SequentialHead(EncoderHead):
 
     Examples::
 
-        head = SequentialHed(
+        head = SequentialHead(
             nn.Linear(10, 20),
             nn.ReLU(),
             nn.Linear(20, 30),
