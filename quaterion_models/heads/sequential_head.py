@@ -9,7 +9,7 @@ class SequentialHead(EncoderHead):
 
     Unlike `torch.nn.Sequential`, it also expects the output size to be passed
     as a required  keyword-only argument. It is required because some loss functions
-            may need this information.
+    may need this information.
 
     Args:
         args: Any sequence of `torch.nn.Module` instances. See `torch.nn.Sequential` for more info.
@@ -35,6 +35,18 @@ class SequentialHead(EncoderHead):
         return self._output_size
 
     def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+        """Forward pass for this head layer.
+
+        Just like `torch.nn.Sequential`, it passes the input to the first module,
+        and the output of each module is input to the next. The final output of this head layer is
+        the output from the last module in the sequence.
+
+        Args:
+            input_vectors: Batch of input vectors.
+
+        Returns:
+            Output from the last module in the sequence.
+        """
         return self._sequential.forward(input_vectors)
 
     def __getitem__(self, idx) -> Union[nn.Sequential, nn.Module]:
