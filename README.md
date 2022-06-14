@@ -1,6 +1,7 @@
 # Quaterion Models
 
-`quaterion-models` - is a servable part of [`Quaterion`](https://github.com/qdrant/quaterion) similarity learning framework.
+`quaterion-models` is a part of [`Quaterion`](https://github.com/qdrant/quaterion), similarity learning framework.
+It is kept as a separate package to make servable models lightweight and free from training dependencies.
 
 It contains definition of base classes, used for model inference, as well as the collection of building blocks building fine-tunable metric learning models.
 
