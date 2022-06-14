@@ -6,7 +6,7 @@ It is kept as a separate package to make servable models lightweight and free fr
 It contains definition of base classes, used for model inference, as well as the collection of building blocks for building fine-tunable similarity learning models.
 The documentation can be found [here](https://quaterion-models.qdrant.tech/).
 
-For more information about Quaterion, please see the [main repository](https://github.com/qdrant/quaterion)
+If you are looking for the training-related part of Quaterion, please see the [main repository](https://github.com/qdrant/quaterion) instead.
 
 ## Install
 
