@@ -7,6 +7,37 @@ from quaterion_models.heads import EncoderHead
 
 
 class SoftmaxEmbeddingsHead(EncoderHead):
+    """Provides a concatenation of the independent softmax embeddings groups as a head layer
+
+    Useful for deriving embedding confidence.
+
+    Schema:
+        .. code-block:: none
+
+                      ┌──────────────────┐
+                      │    Encoder       │
+                      └──┬───────────┬───┘
+                         │           │
+                         │           │
+             ┌───────────┼───────────┼───────────┐
+             │           │           │           │
+             │ ┌─────────▼──┐     ┌──▼─────────┐ │
+             │ │  Linear    │ ... │  Linear    │ │
+             │ └─────┬──────┘     └─────┬──────┘ │
+             │       │                  │        │
+             │ ┌─────┴──────┐     ┌─────┴──────┐ │
+             │ │  SoftMax   │ ... │  SoftMax   │ │
+             │ └─────┬──────┘     └─────┬──────┘ │
+             │       │                  │        │
+             │  ┌────┴──────────────────┴─────┐  │
+             │  │       Concatenation         │  │
+             │  └──────────────┬──────────────┘  │
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                               │
+                               ▼
+
+    """
     def __init__(
         self,
         output_groups: int,
