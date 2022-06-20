@@ -10,6 +10,7 @@ Submodules
    quaterion_models.heads.empty_head
    quaterion_models.heads.encoder_head
    quaterion_models.heads.gated_head
+   quaterion_models.heads.sequential_head
    quaterion_models.heads.skip_connection_head
    quaterion_models.heads.softmax_head
    quaterion_models.heads.stacked_projection_head
