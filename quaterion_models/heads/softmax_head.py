@@ -38,6 +38,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
                                ▼
 
     """
+
     def __init__(
         self,
         output_groups: int,
