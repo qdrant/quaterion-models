@@ -19,8 +19,9 @@ Encoders
 .. autosummary::
     :nosignatures:
 
-    Encoder
-    SwitchEncoder
+    ~encoder.Encoder
+    ~switch_encoder.SwitchEncoder
+    ~extras.fasttext_encoder.FasttextEncoder
 
 
 Head Layers
@@ -31,9 +32,9 @@ Head Layers
 .. autosummary::
     :nosignatures:
 
-    EmptyHead
-    GatedHead
-    SkipConnectionHead
-    SoftmaxEmbeddingsHead
-    StackedProjectionHead
-    WideningHead
+    ~empty_head.EmptyHead
+    ~gated_head.GatedHead
+    ~skip_connection_head.SkipConnectionHead
+    ~softmax_head.SoftmaxEmbeddingsHead
+    ~stacked_projection_head.StackedProjectionHead
+    ~widening_head.WideningHead

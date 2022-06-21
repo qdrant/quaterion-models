@@ -9,8 +9,7 @@ models lightweight and free from training dependencies.
 
 It contains definition of base classes, used for model inference, as
 well as the collection of building blocks for building fine-tunable
-similarity learning models. The documentation can be found
-`here <https://quaterion-models.qdrant.tech/>`__.
+similarity learning models.
 
 If you are looking for the training-related part of Quaterion, please
 see the `main repository <https://github.com/qdrant/quaterion>`__
@@ -46,7 +45,7 @@ Load and inference
 Content
 -------
 
--  ``SimilarityModel`` - main class which contains encoder models with
+-  :class:`~quaterion_models.model.SimilarityModel` - main class which contains encoder models with
    the head layer
 -  Base class for Encoders
 -  Base class and various implementations of the Head Layers
