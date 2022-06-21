@@ -4,6 +4,8 @@ from quaterion_models.heads import EncoderHead
 
 
 class EmptyHead(EncoderHead):
+    """Returns input embeddings without any modification"""
+
     def __init__(self, input_embedding_size: int, dropout: float = 0.0):
         super(EmptyHead, self).__init__(input_embedding_size, dropout=dropout)
 

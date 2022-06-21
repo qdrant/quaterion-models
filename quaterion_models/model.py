@@ -20,6 +20,8 @@ DEFAULT_ENCODER_KEY = "default"
 
 
 class SimilarityModel(nn.Module):
+    """Main class which contains encoder models with the head layer."""
+
     def __init__(self, encoders: Union[Encoder, Dict[str, Encoder]], head: EncoderHead):
         super().__init__()
 
