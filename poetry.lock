@@ -326,7 +326,7 @@ sphinx = "*"
 type = "git"
 url = "https://github.com/qdrant/qdrant_sphinx_theme.git"
 reference = "master"
-resolved_reference = "08e646952d73738bb394cb12b2106b65e30456da"
+resolved_reference = "76ffc0cf8f9cb7f1af8a155c5a46c44faf669c00"
 
 [[package]]
 name = "requests"
