@@ -45,16 +45,8 @@ Load and inference
 Content
 -------
 
--  :class:`~quaterion_models.model.SimilarityModel` - main class which contains encoder models with
-   the head layer
--  Base class for Encoders
--  Base class and various implementations of the Head Layers
--  Additional helper functions
-
-
 .. toctree::
    :maxdepth: 1
-   :caption: Quaterion API
 
    api/index
 
