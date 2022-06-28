@@ -3,7 +3,7 @@ Welcome to quaterion-models's documentation!
 
 
 ``quaterion-models`` is a part of
-`Quaterion <https://github.com/qdrant/quaterion>`__, similarity
+`Quaterion <https://quaterion.qdrant.tech/>`_, similarity
 learning framework. It is kept as a separate package to make servable
 models lightweight and free from training dependencies.
 
@@ -12,7 +12,7 @@ well as the collection of building blocks for building fine-tunable
 similarity learning models.
 
 If you are looking for the training-related part of Quaterion, please
-see the `main repository <https://github.com/qdrant/quaterion>`__
+see the `main repository <https://github.com/qdrant/quaterion>`_
 instead.
 
 Install
