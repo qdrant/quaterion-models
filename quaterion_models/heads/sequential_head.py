@@ -1,7 +1,7 @@
 from typing import Iterator, Union
 import torch
 import torch.nn as nn
-from quaterion_models.heads.encoder_head import EncoderHead
+from quaterion_models.heads import EncoderHead
 
 
 class SequentialHead(EncoderHead):
