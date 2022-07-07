@@ -34,6 +34,7 @@ Head Layers
 
     ~empty_head.EmptyHead
     ~gated_head.GatedHead
+    ~sequential_head.SequentialHead
     ~skip_connection_head.SkipConnectionHead
     ~softmax_head.SoftmaxEmbeddingsHead
     ~stacked_projection_head.StackedProjectionHead
