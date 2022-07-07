@@ -1,6 +1,6 @@
 import torch
 
-from quaterion_models.heads import EncoderHead
+from quaterion_models.heads.encoder_head import EncoderHead
 
 
 class EmptyHead(EncoderHead):

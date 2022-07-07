@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 import torch
 import torch.nn as nn
 
-from quaterion_models.heads import EncoderHead
+from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.modules import ActivationFromFnName
 
 

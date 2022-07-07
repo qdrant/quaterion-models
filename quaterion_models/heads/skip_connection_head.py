@@ -4,7 +4,7 @@ import torch
 
 from torch.nn import Parameter
 
-from quaterion_models.heads import EncoderHead
+from quaterion_models.heads.encoder_head import EncoderHead
 
 
 class SkipConnectionHead(EncoderHead):
