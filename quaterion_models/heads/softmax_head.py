@@ -3,7 +3,7 @@ from typing import Dict, Any
 import torch
 from torch.nn import Linear
 
-from quaterion_models.heads import EncoderHead
+from quaterion_models.heads.encoder_head import EncoderHead
 
 
 class SoftmaxEmbeddingsHead(EncoderHead):
