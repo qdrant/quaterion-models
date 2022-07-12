@@ -1,4 +1,4 @@
-from quaterion_models.utils import save_class_import, restore_class
+from quaterion_models.utils import restore_class, save_class_import
 
 
 def test_restore_class():

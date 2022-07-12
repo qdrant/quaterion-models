@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import os
-from typing import List, Any, Union
+from typing import Any, List, Union
 
 import gensim
 import numpy as np

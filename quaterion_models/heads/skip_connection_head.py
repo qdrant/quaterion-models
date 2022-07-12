@@ -1,7 +1,6 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 import torch
-
 from torch.nn import Parameter
 
 from quaterion_models.heads.encoder_head import EncoderHead

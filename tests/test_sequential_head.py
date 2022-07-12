@@ -1,17 +1,15 @@
 import os
 import tempfile
-from typing import List, Any
+from typing import Any, List
 
 import torch
 import torch.nn as nn
 from torch import Tensor
 
-
 from quaterion_models.encoders import Encoder
-from quaterion_models.model import SimilarityModel
 from quaterion_models.heads.sequential_head import SequentialHead
-from quaterion_models.types import TensorInterchange, CollateFnType
-
+from quaterion_models.model import SimilarityModel
+from quaterion_models.types import CollateFnType, TensorInterchange
 
 BATCH_SIZE = 3
 INPUT_EMBEDDING_SIZE = 5

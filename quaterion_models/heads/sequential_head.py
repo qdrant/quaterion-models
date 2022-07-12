@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Iterator, Union, Dict, Any
+from typing import Any, Dict, Iterator, Union
 
 import torch
 import torch.nn as nn

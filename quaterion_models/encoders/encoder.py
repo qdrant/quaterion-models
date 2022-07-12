@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from torch import Tensor
-from torch import nn
+from torch import Tensor, nn
 from torch.utils.data.dataloader import default_collate
 
-from quaterion_models.types import TensorInterchange, CollateFnType
+from quaterion_models.types import CollateFnType, TensorInterchange
 
 
 class Encoder(nn.Module):

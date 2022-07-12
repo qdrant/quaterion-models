@@ -1,15 +1,15 @@
 from abc import ABC
-from typing import List, Any
+from typing import Any, List
 
 import numpy as np
 import torch
 from torch import Tensor
 
 from quaterion_models.encoders import Encoder
-from quaterion_models.heads.empty_head import EmptyHead
-from quaterion_models.types import TensorInterchange, CollateFnType
-from quaterion_models.model import SimilarityModel
 from quaterion_models.encoders.switch_encoder import SwitchEncoder
+from quaterion_models.heads.empty_head import EmptyHead
+from quaterion_models.model import SimilarityModel
+from quaterion_models.types import CollateFnType, TensorInterchange
 
 
 class CustomEncoder(Encoder, ABC):

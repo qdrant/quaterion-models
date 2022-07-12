@@ -3,14 +3,14 @@ from __future__ import annotations
 import json
 import os
 from functools import partial
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 import torch
 from torch import Tensor
 
 from quaterion_models.encoders import Encoder
-from quaterion_models.types import TensorInterchange, CollateFnType
-from quaterion_models.utils import save_class_import, restore_class, move_to_device
+from quaterion_models.types import CollateFnType, TensorInterchange
+from quaterion_models.utils import move_to_device, restore_class, save_class_import
 
 
 def inverse_permutation(perm):
