@@ -1,3 +1,5 @@
+import json
+import os
 from typing import Iterator, Union, Dict, Any
 
 import torch
@@ -82,3 +84,17 @@ class SequentialHead(EncoderHead):
 
     def __iter__(self) -> Iterator[nn.Module]:
         return self._sequential.__iter__()
+
+    def save(self, output_path):
+        torch.save(self._sequential, os.path.join(output_path, "weights.bin"))
+
+        with open(os.path.join(output_path, "config.json"), "w") as f_out:
+            json.dump(self.get_config_dict(), f_out, indent=2)
+
+    @classmethod
+    def load(cls, input_path: str) -> "EncoderHead":
+        with open(os.path.join(input_path, "config.json")) as f_in:
+            config = json.load(f_in)
+        sequential = torch.load(os.path.join(input_path, "weights.bin"), map_location='cpu')
+        model = cls(*sequential, **config)
+        return model
