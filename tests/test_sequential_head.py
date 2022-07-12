@@ -52,7 +52,7 @@ class CustomEncoder(Encoder):
     @classmethod
     def collate_fn(cls, batch: List[Any]):
         return torch.stack(batch)
-        
+
     def get_collate_fn(self) -> CollateFnType:
         return self.__class__.collate_fn
 
@@ -90,5 +90,7 @@ def test_save_and_load():
 
     assert type(model.head) == type(loaded_model.head)
     assert torch.allclose(origin_output, loaded_model.encode(batch, to_numpy=False))
+
+
 if __name__ == "__main__":
     test_save_and_load()

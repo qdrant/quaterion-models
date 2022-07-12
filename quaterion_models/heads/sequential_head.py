@@ -95,6 +95,8 @@ class SequentialHead(EncoderHead):
     def load(cls, input_path: str) -> "EncoderHead":
         with open(os.path.join(input_path, "config.json")) as f_in:
             config = json.load(f_in)
-        sequential = torch.load(os.path.join(input_path, "weights.bin"), map_location='cpu')
+        sequential = torch.load(
+            os.path.join(input_path, "weights.bin"), map_location="cpu"
+        )
         model = cls(*sequential, **config)
         return model
