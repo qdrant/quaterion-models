@@ -1,6 +1,8 @@
-from typing import Iterator, Union
+from typing import Iterator, Union, Dict, Any
+
 import torch
 import torch.nn as nn
+
 from quaterion_models.heads.encoder_head import EncoderHead
 
 
@@ -49,6 +51,20 @@ class SequentialHead(EncoderHead):
         """
         return self._sequential.forward(input_vectors)
 
+    def append(self, module: nn.Module) -> "SequentialHead":
+        self._sequential.append(module)
+        return self
+
+    def get_config_dict(self) -> Dict[str, Any]:
+        """Constructs savable params dict
+
+        Returns:
+            Serializable parameters for __init__ of the Module
+        """
+        return {
+            "output_size": self._output_size,
+        }
+
     def __getitem__(self, idx) -> Union[nn.Sequential, nn.Module]:
         return self._sequential[idx]
 
@@ -56,7 +72,7 @@ class SequentialHead(EncoderHead):
         return self._sequential.__delitem(idx)
 
     def __setitem__(self, idx: int, module: nn.Module) -> None:
-        return self._sequential.__setitem__(idx, Module)
+        return self._sequential.__setitem__(idx, module)
 
     def __len__(self) -> int:
         return self._sequential.__len__()
@@ -66,7 +82,3 @@ class SequentialHead(EncoderHead):
 
     def __iter__(self) -> Iterator[nn.Module]:
         return self._sequential.__iter__()
-
-    def append(self, module: nn.Module) -> "SequentialHead":
-        self._sequential.append(module)
-        return self
