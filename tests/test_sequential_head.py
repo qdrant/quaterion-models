@@ -90,5 +90,3 @@ def test_save_and_load():
 
     assert type(model.head) == type(loaded_model.head)
     assert torch.allclose(origin_output, loaded_model.encode(batch, to_numpy=False))
-if __name__ == "__main__":
-    test_save_and_load()
