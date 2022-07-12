@@ -52,7 +52,7 @@ class CustomEncoder(Encoder):
     @classmethod
     def collate_fn(cls, batch: List[Any]):
         return torch.stack(batch)
-        
+
     def get_collate_fn(self) -> CollateFnType:
         return self.__class__.collate_fn
 
