@@ -14,7 +14,7 @@ If you are looking for the training-related part of Quaterion, please see the [m
 pip install quaterion-models
 ```
 
-It makes sense to install `quaterion-models` independent of the main framework if you already have trained model 
+It makes sense to install `quaterion-models` independent of the main framework if you already have trained model
 and only need to make inference.
 
 ## Load and inference

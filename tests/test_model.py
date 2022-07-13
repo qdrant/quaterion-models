@@ -1,15 +1,15 @@
 import os
 import tempfile
 from multiprocessing import Pool
-from typing import List, Any
+from typing import Any, List
 
 import torch
 from torch import Tensor
 
-from quaterion_models.encoders import Encoder
-from quaterion_models.types import TensorInterchange, CollateFnType
-from quaterion_models.heads import EmptyHead, EncoderHead
 from quaterion_models import SimilarityModel
+from quaterion_models.encoders import Encoder
+from quaterion_models.heads import EmptyHead, EncoderHead
+from quaterion_models.types import CollateFnType, TensorInterchange
 
 TEST_EMB_SIZE = 5
 
