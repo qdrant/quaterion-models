@@ -47,9 +47,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
         dropout: float = 0.0,
         **kwargs
     ):
-        super(SoftmaxEmbeddingsHead, self).__init__(
-            input_embedding_size, dropout=dropout, **kwargs
-        )
+        super().__init__(input_embedding_size, dropout=dropout, **kwargs)
 
         self.output_groups = output_groups
         self.output_size_per_group = output_size_per_group
@@ -61,7 +59,7 @@ class SoftmaxEmbeddingsHead(EncoderHead):
 
     @property
     def output_size(self) -> int:
-        return self.output_size_per_group * self.output_group
+        return self.output_size_per_group * self.output_groups
 
     def transform(self, input_vectors: torch.Tensor):
         """
