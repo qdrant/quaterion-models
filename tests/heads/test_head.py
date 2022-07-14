@@ -1,6 +1,6 @@
 import os
 import tempfile
-from typing import List, Any
+from typing import Any, List
 
 import pytest
 import torch
@@ -10,15 +10,14 @@ from torch import Tensor
 from quaterion_models import SimilarityModel
 from quaterion_models.encoders import Encoder
 from quaterion_models.heads import (
-    SequentialHead,
-    GatedHead,
-    WideningHead,
-    SkipConnectionHead,
     EmptyHead,
+    GatedHead,
+    SequentialHead,
+    SkipConnectionHead,
     SoftmaxEmbeddingsHead,
+    WideningHead,
 )
 from quaterion_models.types import CollateFnType, TensorInterchange
-
 
 BATCH_SIZE = 3
 INPUT_EMBEDDING_SIZE = 5
