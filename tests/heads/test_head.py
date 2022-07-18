@@ -2,33 +2,46 @@ import os
 import tempfile
 from typing import Any, List
 
+import pytest
 import torch
 import torch.nn as nn
 from torch import Tensor
 
+from quaterion_models import SimilarityModel
 from quaterion_models.encoders import Encoder
-from quaterion_models.heads.sequential_head import SequentialHead
-from quaterion_models.model import SimilarityModel
+from quaterion_models.heads import (
+    EmptyHead,
+    GatedHead,
+    SequentialHead,
+    SkipConnectionHead,
+    SoftmaxEmbeddingsHead,
+    WideningHead,
+)
 from quaterion_models.types import CollateFnType, TensorInterchange
 
 BATCH_SIZE = 3
 INPUT_EMBEDDING_SIZE = 5
-HIDDEN_EMBEDDING_SIZE = 6
-OUTPUT_EMBEDDING_SIZE = 7
+HIDDEN_EMBEDDING_SIZE = 7
+OUTPUT_EMBEDDING_SIZE = 10
 
-
-def test_forward():
-    head = SequentialHead(
+_HEADS = (
+    SequentialHead(
         nn.Linear(INPUT_EMBEDDING_SIZE, HIDDEN_EMBEDDING_SIZE),
         nn.ReLU(),
         nn.Linear(HIDDEN_EMBEDDING_SIZE, OUTPUT_EMBEDDING_SIZE),
         output_size=OUTPUT_EMBEDDING_SIZE,
-    )
-
-    batch = torch.rand(BATCH_SIZE, INPUT_EMBEDDING_SIZE)
-    res = head.forward(batch)
-
-    assert res.shape == (BATCH_SIZE, OUTPUT_EMBEDDING_SIZE)
+    ),
+    GatedHead(INPUT_EMBEDDING_SIZE),
+    WideningHead(INPUT_EMBEDDING_SIZE),
+    SkipConnectionHead(INPUT_EMBEDDING_SIZE),
+    EmptyHead(INPUT_EMBEDDING_SIZE),
+    SoftmaxEmbeddingsHead(
+        output_groups=2,
+        output_size_per_group=OUTPUT_EMBEDDING_SIZE,
+        input_embedding_size=INPUT_EMBEDDING_SIZE,
+    ),
+)
+HEADS = {head_.__class__.__name__: head_ for head_ in _HEADS}
 
 
 class CustomEncoder(Encoder):
@@ -58,14 +71,9 @@ class CustomEncoder(Encoder):
         return batch
 
 
-def test_save_and_load():
+@pytest.mark.parametrize("head", HEADS.values(), ids=HEADS.keys())
+def test_save_and_load(head):
     encoder = CustomEncoder()
-    head = SequentialHead(
-        nn.Linear(INPUT_EMBEDDING_SIZE, HIDDEN_EMBEDDING_SIZE),
-        nn.ReLU(),
-        nn.Linear(HIDDEN_EMBEDDING_SIZE, OUTPUT_EMBEDDING_SIZE),
-        output_size=OUTPUT_EMBEDDING_SIZE,
-    )
 
     model = SimilarityModel(encoders=encoder, head=head)
     tempdir = tempfile.TemporaryDirectory()
@@ -88,3 +96,10 @@ def test_save_and_load():
 
     assert type(model.head) == type(loaded_model.head)
     assert torch.allclose(origin_output, loaded_model.encode(batch, to_numpy=False))
+
+
+@pytest.mark.parametrize("head", HEADS.values(), ids=HEADS.keys())
+def test_forward_shape(head):
+    batch = torch.rand(BATCH_SIZE, INPUT_EMBEDDING_SIZE)
+    res = head.forward(batch)
+    assert res.shape == (BATCH_SIZE, head.output_size)
