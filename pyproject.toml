@@ -13,9 +13,9 @@ keywords = ["framework", "metric-learning", "similarity", "similarity-learning",
 
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.10"
+python = ">=3.8,<3.11"
 torch = ">=1.8.2"
-numpy = "^1.21.2"
+numpy = "^1.22"
 gensim = {version = "^4.1.2", optional = true}
 
 
