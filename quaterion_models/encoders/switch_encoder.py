@@ -77,6 +77,10 @@ class SwitchEncoder(Encoder):
             switch_batches[record_encoder].append(record)
             switch_ordering[record_encoder].append(original_id)
 
+        switch_batches = {
+            key: encoder_collates[key](batch) for key, batch in switch_batches.items()
+        }
+
         return {"ordering": switch_ordering, "batches": switch_batches}
 
     def get_collate_fn(self) -> CollateFnType:
