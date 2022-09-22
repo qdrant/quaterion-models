@@ -78,7 +78,7 @@ class SwitchEncoder(Encoder):
             switch_ordering[record_encoder].append(original_id)
 
         switch_batches = {
-            key: encoder_collates[key](batch) for key, batch in switch_batches.items()
+            key: encoder_collates[key](batch) for key, batch in switch_batches.items() if len(batch) > 0
         }
 
         return {"ordering": switch_ordering, "batches": switch_batches}
