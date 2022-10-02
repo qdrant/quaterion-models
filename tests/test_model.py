@@ -78,9 +78,9 @@ def test_get_collate_fn():
 
     first_batch = res[0]
 
-    assert "test" in first_batch
+    assert "test" in first_batch["data"]
 
-    tensor = first_batch["test"]
+    tensor = first_batch["data"]["test"]
 
     assert tensor.shape == (3, TEST_EMB_SIZE)
 

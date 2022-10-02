@@ -93,6 +93,15 @@ class SwitchEncoder(Encoder):
             ),
         )
 
+    @classmethod
+    def extract_meta(cls, batch: List[Any]) -> List[dict]:
+        meta = []
+        for record in batch:
+            meta.append({
+                "encoder": cls.encoder_selection(record),
+            })
+        return meta
+
     def forward(self, batch: TensorInterchange) -> Tensor:
         switch_ordering: dict = batch["ordering"]
         switch_batches: dict = batch["batches"]
