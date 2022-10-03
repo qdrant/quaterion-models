@@ -59,7 +59,7 @@ class SimilarityModel(nn.Module):
         )
         return {
             "data": data,
-            "meta": meta,
+            "meta": merge_meta(meta),
         }
 
     @classmethod
@@ -160,10 +160,7 @@ class SimilarityModel(nn.Module):
             (key, encoder.forward(batch["data"][key])) for key, encoder in self.encoders.items()
         ]
 
-        # Combine meta from all encoders
-        # Example: Encoder 1 meta: [{"a": 1}, {"a": 2}], Encoder 2 meta: [{"b": 3}, {"b": 4}]
-        # Result: [{"a": 1, "b": 3}, {"a": 2, "b": 4}]
-        meta = merge_meta(batch["meta"])
+        meta = batch["meta"]
 
         # Order embeddings by key name, to ensure reproduction
         embeddings = sorted(embeddings, key=lambda x: x[0])
