@@ -13,6 +13,7 @@ from quaterion_models.encoders import Encoder
 from quaterion_models.heads.encoder_head import EncoderHead
 from quaterion_models.types import CollateFnType, TensorInterchange, MetaExtractorFnType
 from quaterion_models.utils.classes import restore_class, save_class_import
+from quaterion_models.utils.meta import merge_meta
 from quaterion_models.utils.tensors import move_to_device
 
 DEFAULT_ENCODER_KEY = "default"
@@ -162,14 +163,7 @@ class SimilarityModel(nn.Module):
         # Combine meta from all encoders
         # Example: Encoder 1 meta: [{"a": 1}, {"a": 2}], Encoder 2 meta: [{"b": 3}, {"b": 4}]
         # Result: [{"a": 1, "b": 3}, {"a": 2, "b": 4}]
-        meta = None
-        for key, encoder in self.encoders.items():
-            if meta is None:
-                meta = encoder.extract_meta(batch["meta"][key])
-            else:
-                encoder_meta = encoder.extract_meta(batch["meta"][key])
-                for i in range(len(meta)):
-                    meta[i].update(encoder_meta[i])
+        meta = merge_meta(batch["meta"])
 
         # Order embeddings by key name, to ensure reproduction
         embeddings = sorted(embeddings, key=lambda x: x[0])
