@@ -1,13 +1,13 @@
 import json
 import os
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 import torch
 from torch import Tensor
 
 from quaterion_models.encoders.switch_encoder import inverse_permutation
 from quaterion_models.heads import EncoderHead
-from quaterion_models.utils import save_class_import, restore_class
+from quaterion_models.utils import restore_class, save_class_import
 
 
 class SwitchHead(EncoderHead):
@@ -18,7 +18,9 @@ class SwitchHead(EncoderHead):
         heads: dict of heads. Choice of head is based on the metadata key
     """
 
-    def __init__(self, heads: Dict[str, EncoderHead], input_embedding_size: int, **kwargs):
+    def __init__(
+        self, heads: Dict[str, EncoderHead], input_embedding_size: int, **kwargs
+    ):
         super().__init__(input_embedding_size, dropout=0.0, **kwargs)
         self._heads = heads
         for key, head in self._heads.items():
@@ -31,7 +33,9 @@ class SwitchHead(EncoderHead):
     def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
         pass
 
-    def forward(self, input_vectors: torch.Tensor, meta: List[Any] = None) -> torch.Tensor:
+    def forward(
+        self, input_vectors: torch.Tensor, meta: List[Any] = None
+    ) -> torch.Tensor:
         # Shape: [batch_size x input_embedding_size]
         dropout_input = self.dropout(input_vectors)
 
@@ -61,10 +65,10 @@ class SwitchHead(EncoderHead):
             Serializable parameters for __init__ of the Module
         """
         return {
-            "heads": {k: {
-                "config": v.get_config_dict(),
-                "class": save_class_import(v)
-            } for k, v in self._heads.items()},
+            "heads": {
+                k: {"config": v.get_config_dict(), "class": save_class_import(v)}
+                for k, v in self._heads.items()
+            },
             "input_embedding_size": self.input_embedding_size,
         }
 

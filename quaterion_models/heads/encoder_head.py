@@ -43,7 +43,9 @@ class EncoderHead(nn.Module):
         """
         raise NotImplementedError()
 
-    def forward(self, input_vectors: torch.Tensor, meta: List[Any] = None) -> torch.Tensor:
+    def forward(
+        self, input_vectors: torch.Tensor, meta: List[Any] = None
+    ) -> torch.Tensor:
         return self.transform(self.dropout(input_vectors))
 
     def get_config_dict(self) -> Dict[str, Any]:

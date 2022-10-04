@@ -12,10 +12,9 @@ class FakeHeadA(EncoderHead):
         return 3
 
     def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
-        return input_vectors + torch.tensor([
-            [0, 0, 1]
-            for _ in range(input_vectors.shape[0])
-        ])
+        return input_vectors + torch.tensor(
+            [[0, 0, 1] for _ in range(input_vectors.shape[0])]
+        )
 
 
 class FakeHeadB(EncoderHead):
@@ -24,10 +23,9 @@ class FakeHeadB(EncoderHead):
         return 3
 
     def transform(self, input_vectors: torch.Tensor) -> torch.Tensor:
-        return input_vectors + torch.tensor([
-            [0, 2, 0]
-            for _ in range(input_vectors.shape[0])
-        ])
+        return input_vectors + torch.tensor(
+            [[0, 2, 0] for _ in range(input_vectors.shape[0])]
+        )
 
 
 def test_save_and_load():
@@ -50,20 +48,22 @@ def test_forward():
         input_embedding_size=3,
     )
 
-    batch = torch.tensor([
-        [1, 0, 0],
-        [2, 0, 0],
-        [3, 0, 0],
-        [4, 0, 0],
-        [5, 0, 0],
-    ])
+    batch = torch.tensor(
+        [
+            [1, 0, 0],
+            [2, 0, 0],
+            [3, 0, 0],
+            [4, 0, 0],
+            [5, 0, 0],
+        ]
+    )
 
     meta = [
         {"encoder": "b"},
         {"encoder": "a"},
         {"encoder": "b"},
         {"encoder": "b"},
-        {"encoder": "a"}
+        {"encoder": "a"},
     ]
 
     res = head.forward(batch, meta)
@@ -88,4 +88,3 @@ def test_forward():
     assert res[2][2] == 0
     assert res[3][2] == 0
     assert res[4][2] == 1
-

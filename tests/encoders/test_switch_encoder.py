@@ -84,4 +84,3 @@ def test_meta():
     assert meta[4]["encoder"] == "a"
     assert meta[5]["encoder"] == "a"
     assert meta[6]["encoder"] == "b"
-

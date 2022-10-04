@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 
 def merge_meta(meta: Dict[str, list]) -> List[dict]:

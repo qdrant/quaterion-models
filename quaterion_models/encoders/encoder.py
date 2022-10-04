@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import List, Any
+from typing import Any, List
 
 from torch import Tensor, nn
 from torch.utils.data.dataloader import default_collate
 
-from quaterion_models.types import CollateFnType, TensorInterchange, MetaExtractorFnType
+from quaterion_models.types import CollateFnType, MetaExtractorFnType, TensorInterchange
 
 
 class Encoder(nn.Module):
