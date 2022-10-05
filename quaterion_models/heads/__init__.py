@@ -5,4 +5,5 @@ from quaterion_models.heads.sequential_head import SequentialHead
 from quaterion_models.heads.skip_connection_head import SkipConnectionHead
 from quaterion_models.heads.softmax_head import SoftmaxEmbeddingsHead
 from quaterion_models.heads.stacked_projection_head import StackedProjectionHead
+from quaterion_models.heads.switch_head import SwitchHead
 from quaterion_models.heads.widening_head import WideningHead
