@@ -30,7 +30,7 @@ class FakeHeadB(EncoderHead):
 
 def test_save_and_load():
     head = SwitchHead(
-        heads={"a": FakeHeadA(3), "b": FakeHeadB(3)},
+        options={"a": FakeHeadA(3), "b": FakeHeadB(3)},
         input_embedding_size=3,
     )
 
@@ -44,7 +44,7 @@ def test_save_and_load():
 
 def test_forward():
     head = SwitchHead(
-        heads={"a": FakeHeadA(3), "b": FakeHeadB(3)},
+        options={"a": FakeHeadA(3), "b": FakeHeadB(3)},
         input_embedding_size=3,
     )
 
@@ -88,3 +88,5 @@ def test_forward():
     assert res[2][2] == 0
     assert res[3][2] == 0
     assert res[4][2] == 1
+    
+test_save_and_load()
