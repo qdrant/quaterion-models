@@ -88,5 +88,6 @@ def test_forward():
     assert res[2][2] == 0
     assert res[3][2] == 0
     assert res[4][2] == 1
-    
+
+
 test_save_and_load()
