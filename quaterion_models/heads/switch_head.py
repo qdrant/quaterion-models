@@ -19,10 +19,10 @@ class SwitchHead(EncoderHead):
     """
 
     def __init__(
-        self, heads: Dict[str, EncoderHead], input_embedding_size: int, **kwargs
+        self, options: Dict[str, EncoderHead], input_embedding_size: int, **kwargs
     ):
         super().__init__(input_embedding_size, dropout=0.0, **kwargs)
-        self._heads = heads
+        self._heads = options
         for key, head in self._heads.items():
             self.add_module(key, head)
 
