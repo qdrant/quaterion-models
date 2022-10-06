@@ -15,7 +15,7 @@ class SwitchHead(EncoderHead):
     Useful in combination with the SwitchEncoder for training multimodal models
 
     Args:
-        heads: dict of heads. Choice of head is based on the metadata key
+        options: dict of heads. Choice of head is based on the metadata key
     """
 
     def __init__(
@@ -84,6 +84,6 @@ class SwitchHead(EncoderHead):
             for key, head_config in heads_config.items()
         )
 
-        model = cls(heads=heads, **config)
+        model = cls(options=heads, **config)
         model.load_state_dict(torch.load(os.path.join(input_path, "weights.bin")))
         return model
