@@ -65,3 +65,22 @@ def test_forward():
 
     assert res.shape[0] == len(batch)
     assert all(res[:, 0] == np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0]))
+
+
+def test_meta():
+    encoder = CustomSwitchEncoder({"a": EncoderA(), "b": EncoderB()})
+    meta_extractor = encoder.get_meta_extractor()
+
+    batch = ["zeros", "zeros", "ones", "ones", "zeros", "zeros", "ones"]
+
+    meta = meta_extractor(batch)
+    print("")
+    print(meta)
+
+    assert meta[0]["encoder"] == "a"
+    assert meta[1]["encoder"] == "a"
+    assert meta[2]["encoder"] == "b"
+    assert meta[3]["encoder"] == "b"
+    assert meta[4]["encoder"] == "a"
+    assert meta[5]["encoder"] == "a"
+    assert meta[6]["encoder"] == "b"

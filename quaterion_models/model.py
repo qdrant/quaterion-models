@@ -11,8 +11,9 @@ from torch import nn
 
 from quaterion_models.encoders import Encoder
 from quaterion_models.heads.encoder_head import EncoderHead
-from quaterion_models.types import CollateFnType, TensorInterchange
+from quaterion_models.types import CollateFnType, MetaExtractorFnType, TensorInterchange
 from quaterion_models.utils.classes import restore_class, save_class_import
+from quaterion_models.utils.meta import merge_meta
 from quaterion_models.utils.tensors import move_to_device
 
 DEFAULT_ENCODER_KEY = "default"
@@ -37,19 +38,30 @@ class SimilarityModel(nn.Module):
 
     @classmethod
     def collate_fn(
-        cls, batch: List[dict], encoders_collate_fns: Dict[str, CollateFnType]
+        cls,
+        batch: List[dict],
+        encoders_collate_fns: Dict[str, CollateFnType],
+        meta_extractors: Dict[str, MetaExtractorFnType],
     ) -> TensorInterchange:
         """Construct batches for all encoders
 
         Args:
             batch:
             encoders_collate_fns: Dict (or single) of collate functions associated with encoders
+            meta_extractors: Dict (or single) of meta extractor functions associated with encoders
 
         """
-        result = dict(
+        data = dict(
             (key, collate_fn(batch)) for key, collate_fn in encoders_collate_fns.items()
         )
-        return result
+        meta = dict(
+            (key, meta_extractor_fn(batch))
+            for key, meta_extractor_fn in meta_extractors.items()
+        )
+        return {
+            "data": data,
+            "meta": merge_meta(meta),
+        }
 
     @classmethod
     def get_encoders_output_size(cls, encoders: Union[Encoder, Dict[str, Encoder]]):
@@ -78,6 +90,10 @@ class SimilarityModel(nn.Module):
             SimilarityModel.collate_fn,
             encoders_collate_fns=dict(
                 (key, encoder.get_collate_fn())
+                for key, encoder in self.encoders.items()
+            ),
+            meta_extractors=dict(
+                (key, encoder.get_meta_extractor())
                 for key, encoder in self.encoders.items()
             ),
         )
@@ -142,8 +158,12 @@ class SimilarityModel(nn.Module):
 
     def forward(self, batch):
         embeddings = [
-            (key, encoder.forward(batch[key])) for key, encoder in self.encoders.items()
+            (key, encoder.forward(batch["data"][key]))
+            for key, encoder in self.encoders.items()
         ]
+
+        meta = batch["meta"]
+
         # Order embeddings by key name, to ensure reproduction
         embeddings = sorted(embeddings, key=lambda x: x[0])
 
@@ -154,7 +174,7 @@ class SimilarityModel(nn.Module):
         joined_embeddings = torch.cat(embedding_tensors, dim=1)
 
         # Shape: [batch_size x output_emb_size]
-        result_embedding = self.head(joined_embeddings)
+        result_embedding = self.head(joined_embeddings, meta=meta)
 
         return result_embedding
 

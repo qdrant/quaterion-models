@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import Any, List
+
 from torch import Tensor, nn
 from torch.utils.data.dataloader import default_collate
 
-from quaterion_models.types import CollateFnType, TensorInterchange
+from quaterion_models.types import CollateFnType, MetaExtractorFnType, TensorInterchange
 
 
 class Encoder(nn.Module):
@@ -39,6 +41,21 @@ class Encoder(nn.Module):
              :const:`~quaterion_models.types.CollateFnType`: model's collate function
         """
         return default_collate
+
+    @classmethod
+    def extract_meta(cls, batch: List[Any]) -> List[dict]:
+        """Extracts meta information from the batch
+
+        Args:
+            batch: raw batch of data
+
+        Returns:
+            meta information
+        """
+        return [{} for _ in batch]
+
+    def get_meta_extractor(self) -> MetaExtractorFnType:
+        return self.extract_meta
 
     def forward(self, batch: TensorInterchange) -> Tensor:
         """Infer encoder - convert input batch to embeddings

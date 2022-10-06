@@ -14,3 +14,4 @@ TensorInterchange = Union[
 ]
 #:
 CollateFnType = Callable[[List[Any]], TensorInterchange]
+MetaExtractorFnType = Callable[[List[Any]], List[dict]]

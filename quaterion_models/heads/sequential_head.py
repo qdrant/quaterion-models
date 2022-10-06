@@ -38,7 +38,7 @@ class SequentialHead(EncoderHead):
     def output_size(self) -> int:
         return self._output_size
 
-    def forward(self, input_vectors: torch.Tensor) -> torch.Tensor:
+    def forward(self, input_vectors: torch.Tensor, meta=None) -> torch.Tensor:
         """Forward pass for this head layer.
 
         Just like `torch.nn.Sequential`, it passes the input to the first module,
@@ -47,6 +47,7 @@ class SequentialHead(EncoderHead):
 
         Args:
             input_vectors: Batch of input vectors.
+            meta: Optional metadata for this batch.
 
         Returns:
             Output from the last module in the sequence.
