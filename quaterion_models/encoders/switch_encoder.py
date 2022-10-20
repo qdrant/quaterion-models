@@ -36,6 +36,7 @@ class SwitchEncoder(Encoder):
         Returns:
             name of the related encoder
         """
+        print("base class called")
         raise NotImplementedError()
 
     def __init__(self, options: Dict[str, Encoder]):
@@ -146,4 +147,4 @@ class SwitchEncoder(Encoder):
             encoder_class = restore_class(class_params)
             encoders[key] = encoder_class.load(encoder_path)
 
-        return SwitchEncoder(options=encoders)
+        return cls(options=encoders)
