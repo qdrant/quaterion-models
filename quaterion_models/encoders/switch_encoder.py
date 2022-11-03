@@ -36,7 +36,6 @@ class SwitchEncoder(Encoder):
         Returns:
             name of the related encoder
         """
-        print("base class called")
         raise NotImplementedError()
 
     def __init__(self, options: Dict[str, Encoder]):
