@@ -1,3 +1,4 @@
+import tempfile
 from abc import ABC
 from typing import Any, List
 
@@ -84,3 +85,18 @@ def test_meta():
     assert meta[4]["encoder"] == "a"
     assert meta[5]["encoder"] == "a"
     assert meta[6]["encoder"] == "b"
+
+
+def test_save_and_load():
+    encoder = CustomSwitchEncoder({"a": EncoderA(), "b": EncoderB()})
+
+    tempdir = tempfile.TemporaryDirectory()
+    model = SimilarityModel(encoders=encoder, head=EmptyHead(encoder.embedding_size))
+    model.save(tempdir.name)
+    model = model.load(tempdir.name)
+
+    batch = ["zeros", "zeros", "ones", "ones", "zeros", "zeros", "ones"]
+    res = model.encode(batch)
+
+    assert res.shape[0] == len(batch)
+    assert all(res[:, 0] == np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0]))

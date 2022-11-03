@@ -146,4 +146,4 @@ class SwitchEncoder(Encoder):
             encoder_class = restore_class(class_params)
             encoders[key] = encoder_class.load(encoder_path)
 
-        return SwitchEncoder(options=encoders)
+        return cls(options=encoders)
