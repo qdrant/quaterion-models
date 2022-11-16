@@ -47,8 +47,8 @@ class SkipConnectionHead(EncoderHead):
     ):
         super().__init__(input_embedding_size, dropout=dropout)
         for i in range(n_layers):
-            setattr(
-                self, f"gates_{i}", Parameter(torch.Tensor(self.input_embedding_size))
+            self.register_parameter(
+                f"gates_{i}", Parameter(torch.Tensor(self.input_embedding_size))
             )
             setattr(
                 self,
