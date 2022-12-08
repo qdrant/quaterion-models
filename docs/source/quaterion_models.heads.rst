@@ -14,6 +14,7 @@ Submodules
    quaterion_models.heads.skip_connection_head
    quaterion_models.heads.softmax_head
    quaterion_models.heads.stacked_projection_head
+   quaterion_models.heads.switch_head
    quaterion_models.heads.widening_head
 
 Module contents

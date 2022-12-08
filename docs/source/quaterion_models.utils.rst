@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 4
 
    quaterion_models.utils.classes
+   quaterion_models.utils.meta
    quaterion_models.utils.tensors
 
 Module contents
