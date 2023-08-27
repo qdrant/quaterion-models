@@ -16,6 +16,6 @@ def merge_meta(meta: Dict[str, list]) -> List[dict]:
         if aggregated is None:
             aggregated = encoder_meta
         else:
-            for i in range(len(meta)):
+            for i in range(len(aggregated)):
                 aggregated[i].update(encoder_meta[i])
     return aggregated
